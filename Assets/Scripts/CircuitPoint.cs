@@ -55,11 +55,21 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
 
     private void SetPosition()
     {
+        do
+        {
+            SetIndex();
+        }
+        while (CircuitManager.IsAvailable(this) == false);
+
+        transform.position = GameBoardController.GetPositionFor(PositionIndex);
+    }
+
+    private void SetIndex()
+    {
         if (UseEdge)
             PositionIndex = GameBoardController.GetIndexFor(Edge);
         else
-            PositionIndex = GameBoardController.GetRandomIndexPosition();
-        transform.position = GameBoardController.GetPositionFor(PositionIndex);
+            PositionIndex = GameBoardController.GetInnerIndexPosition();
     }
 
     public bool TryGetConnectedTo(IBoardObject placedObject, out List<Vector2Int> connectedOn)

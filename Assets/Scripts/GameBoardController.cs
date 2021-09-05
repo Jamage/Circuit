@@ -59,6 +59,14 @@ public static class GameBoardController
         return new Vector2Int(columnIndex, rowIndex);
     }
 
+    internal static Vector2Int GetInnerIndexPosition()
+    {
+        int innerX = UnityEngine.Random.Range(1, columnCount);
+        int innerY = UnityEngine.Random.Range(1, rowCount);
+
+        return new Vector2Int(innerX, innerY);
+    }
+
     public static Vector3 GetRandomPosition()
     {
         float posX = RandomXPosition();
@@ -76,6 +84,7 @@ public static class GameBoardController
     {
         return positionStart.y - (row * height);
     }
+
 
     public static float RandomXPosition()
     {

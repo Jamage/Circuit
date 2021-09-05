@@ -31,4 +31,22 @@ public class CircuitManager : MonoBehaviour
 
         return allConnected;
     }
+
+    internal static bool IsAvailable(CircuitPoint circuitPoint)
+    {
+        bool isAvailable = true;
+        foreach(CircuitPoint circuit in allCircuitPoints)
+        {
+            if (circuitPoint == circuit)
+                continue;
+
+            if(circuitPoint.PositionIndex == circuit.PositionIndex)
+            {
+                isAvailable = false;
+                break;
+            }
+        }
+
+        return isAvailable;
+    }
 }
