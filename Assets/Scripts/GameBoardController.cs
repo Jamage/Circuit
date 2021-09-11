@@ -11,18 +11,18 @@ public static class GameBoardController
     public static int columnCount, rowCount;
     public static Vector2 positionStart;
 
-    public static void Reset()
+    public static void Reset(GameBoard gameBoard)
     {
-        height = GameBoard.Instance.Height;
-        width = GameBoard.Instance.Width;
-        columnCount = GameBoard.Instance.columnCount;
-        rowCount = GameBoard.Instance.rowCount;
+        height = gameBoard.Height;
+        width = gameBoard.Width;
+        columnCount = gameBoard.columnCount;
+        rowCount = gameBoard.rowCount;
         positionStart = new Vector2((-columnCount * width) / 2, (rowCount * height) / 2);
     }
 
-    internal static Vector3 GetPositionFor(Vector2 positionIndex)
+    internal static Vector3 GetPositionFor(Vector2Int positionIndex)
     {
-        return new Vector3(XPositionForColumn((int)positionIndex.x), YPositionForRow((int)positionIndex.y), 0);
+        return new Vector3(XPositionForColumn(positionIndex.x), YPositionForRow(positionIndex.y), 0);
     }
 
     public static Vector2Int GetRandomIndexPosition()
@@ -30,7 +30,7 @@ public static class GameBoardController
         return new Vector2Int(RandomColumnIndex(), RandomRowIndex());
     }
 
-    public static Vector2Int GetIndexFor(Edge edge)
+    public static Vector2Int GetRandomIndexFor(Edge edge)
     {
         int columnIndex;
         int rowIndex;
@@ -59,7 +59,7 @@ public static class GameBoardController
         return new Vector2Int(columnIndex, rowIndex);
     }
 
-    internal static Vector2Int GetInnerIndexPosition()
+    internal static Vector2Int GetRandomInnerIndexPosition()
     {
         int innerX = UnityEngine.Random.Range(1, columnCount);
         int innerY = UnityEngine.Random.Range(1, rowCount);

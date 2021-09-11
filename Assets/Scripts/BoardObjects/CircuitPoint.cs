@@ -3,27 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[SelectionBase()]
+[SelectionBase(), Serializable]
 public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 {
-    public string Name { get; private set; }
+    public string Name => name;
     public Vector2Int PositionIndex { get; private set; }
     public Edge Edge { get => edge; set => edge = value; }
     [SerializeField] private Edge edge;
     [SerializeField] private bool UseEdge = true;
     public bool IsConnected { get; set; }
     [HideInInspector] public List<Vector2Int> LinePoints { get; private set; }
-    [HideInInspector] public BoardObjectType BoardObjectType { get; private set; }
+    [HideInInspector] public BoardObjectType BoardObjectType => BoardObjectType.Circuit;
     [HideInInspector] public int RequiredConnections { get; private set; }
     public Dictionary<IBoardObject, List<Vector2Int>> ConnectedObjectsAt { get; private set; }
 
     private void Awake()
     {
-        Name = name;
         IsConnected = false;
         LinePoints = new List<Vector2Int>();
         ConnectedObjectsAt = new Dictionary<IBoardObject, List<Vector2Int>>();
-        BoardObjectType = BoardObjectType.Circuit;
         RequiredConnections = 1;
     }
 
@@ -43,33 +41,43 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
     {
         Edge = Helper.GetRandomEnum<Edge>();
         UseEdge = true;
-        SetPosition();
+        SetRandomPosition();
     }
 
     public void InitializeInner()
     {
         Edge = Helper.GetRandomEnum<Edge>();
         UseEdge = false;
-        SetPosition();
+        SetRandomPosition();
     }
 
-    private void SetPosition()
+    private void SetRandomPosition()
     {
         do
         {
-            SetIndex();
+            SetRandomIndex();
         }
         while (CircuitManager.IsAvailable(this) == false);
 
         transform.position = GameBoardController.GetPositionFor(PositionIndex);
     }
 
-    private void SetIndex()
+    internal static CircuitPoint New(CircuitData circuitData)
+    {
+        CircuitPoint circuitPointPrefab = CircuitManager.GetCircuitPrefab();
+        CircuitPoint newPoint = Instantiate(circuitPointPrefab, Vector3.zero, circuitPointPrefab.transform.rotation);
+        newPoint.PositionIndex = circuitData.PositionIndex;
+        newPoint.transform.position = GameBoardController.GetPositionFor(newPoint.PositionIndex);
+        newPoint.RequiredConnections = circuitData.RequiredConnections;
+        return newPoint;
+    }
+
+    private void SetRandomIndex()
     {
         if (UseEdge)
-            PositionIndex = GameBoardController.GetIndexFor(Edge);
+            PositionIndex = GameBoardController.GetRandomIndexFor(Edge);
         else
-            PositionIndex = GameBoardController.GetInnerIndexPosition();
+            PositionIndex = GameBoardController.GetRandomInnerIndexPosition();
     }
 
     public bool TryGetConnectedTo(IBoardObject placedObject, out List<Vector2Int> connectedOn)

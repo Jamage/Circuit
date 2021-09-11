@@ -7,29 +7,27 @@ using UnityEngine.Events;
 [SelectionBase()]
 public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 {
-    public String Name { get; private set; }
+    public String Name => name;
     public PanelType panelType = PanelType.OneTwo;
     public LineRenderer[] borderLines = new LineRenderer[4];
     public LineRenderer[] innerLines = new LineRenderer[2];
     public Vector2Int PositionIndex { get; private set; }
     public List<Vector2Int> LinePoints { get; private set; }
     public bool IsConnected { get; set; }
-    public BoardObjectType BoardObjectType { get; private set; }
+    public BoardObjectType BoardObjectType => BoardObjectType.Panel;
     public int RequiredConnections { get; private set; }
     public Dictionary<IBoardObject, List<Vector2Int>> ConnectedObjectsAt { get; private set; }
 
     public static UnityAction<IBoardObject> OnPlacement;
-
     private Vector3 startPosition;
     private Vector2 dragOffsetPoint;
 
     void Awake()
     {
-        Name = name;
+        PositionIndex = new Vector2Int(-1, -1);
         LinePoints = new List<Vector2Int>();
         ConnectedObjectsAt = new Dictionary<IBoardObject, List<Vector2Int>>();
         IsConnected = false;
-        BoardObjectType = BoardObjectType.Panel;
         RequiredConnections = 2;
     }
 
@@ -54,6 +52,18 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         }
     }
 
+    internal static void New(PanelData panelData)
+    {
+        Panel panelPrefab = PanelManager.Get(panelData.PanelType);
+        Panel newPanel = Instantiate(panelPrefab, Vector3.zero, panelPrefab.transform.rotation);
+        newPanel.Setup(panelData);
+    }
+
+    private void Setup(PanelData panelData)
+    {
+        SetPosition(panelData.PositionIndex);
+    }
+
     private void OnMouseDrag()
     {
         Vector3 mousePos = Input.mousePosition;
@@ -76,7 +86,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             }
 
             transform.position = newPos;
-            SetPositionIndex(bgPanel);
+            SetPosition(bgPanel.PositionIndex);
             RemoveFromConnections();
             ClearConnections();
             OnPlacement?.Invoke(this);
@@ -101,9 +111,10 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         }
     }
 
-    private void SetPositionIndex(BackgroundPanel backgroundPanel)
+    private void SetPosition(Vector2Int positionIndex)
     {
-        PositionIndex = backgroundPanel.PositionIndex;
+        PositionIndex = positionIndex;
+        transform.position = GameBoardController.GetPositionFor(PositionIndex);
         LinePoints.Clear();
         LinePoints.AddRange(GameBoardController.GetConnectingPoints(PositionIndex, panelType));
     }

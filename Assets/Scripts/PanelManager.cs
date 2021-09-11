@@ -5,13 +5,25 @@ using UnityEngine;
 
 public class PanelManager : MonoBehaviour
 {
+    public List<Panel> panelPrefabs;
+    public static Dictionary<PanelType, Panel> prefabDictionary;
     public static List<Panel> allPanels = new List<Panel>();
     public float InnerLineWidth = .04f;
     public float BorderLineWidth = .04f;
 
     private void Awake()
     {
+        SetupDictionary();
         SetAllLineWidths();
+    }
+
+    private void SetupDictionary()
+    {
+        prefabDictionary = new Dictionary<PanelType, Panel>();
+        foreach(Panel prefab in panelPrefabs)
+        {
+            prefabDictionary.Add(prefab.panelType, prefab);
+        }
     }
 
     private void SetAllLineWidths()
@@ -61,5 +73,10 @@ public class PanelManager : MonoBehaviour
         }
 
         return isOccupied;
+    }
+
+    internal static Panel Get(PanelType panelType)
+    {
+        return prefabDictionary[panelType];
     }
 }

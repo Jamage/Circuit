@@ -5,7 +5,18 @@ using UnityEngine;
 
 public class CircuitManager : MonoBehaviour
 {
+    public CircuitPoint circuitPrefab;
+    public static CircuitPoint staticCircuitPrefab;
+    public BlockingPoint blockingPrefab;
+    public static BlockingPoint staticBlockingPrefab;
     public static List<CircuitPoint> allCircuitPoints = new List<CircuitPoint>();
+    public static List<BlockingPoint> allBlockingPoints = new List<BlockingPoint>();
+
+    private void Awake()
+    {
+        staticCircuitPrefab = circuitPrefab;
+        staticBlockingPrefab = blockingPrefab;
+    }
 
     internal static List<Vector2Int> GetCircuitIndexes()
     {
@@ -32,15 +43,27 @@ public class CircuitManager : MonoBehaviour
         return allConnected;
     }
 
-    internal static bool IsAvailable(CircuitPoint circuitPoint)
+    internal static bool IsAvailable(IBoardObject point)
     {
         bool isAvailable = true;
-        foreach(CircuitPoint circuit in allCircuitPoints)
+        foreach(IBoardObject circuit in allCircuitPoints)
         {
-            if (circuitPoint == circuit)
+            if (point == circuit)
                 continue;
 
-            if(circuitPoint.PositionIndex == circuit.PositionIndex)
+            if(point.PositionIndex == circuit.PositionIndex)
+            {
+                isAvailable = false;
+                break;
+            }
+        }
+
+        foreach (IBoardObject block in allBlockingPoints)
+        {
+            if (point == block)
+                continue;
+
+            if (point.PositionIndex == block.PositionIndex)
             {
                 isAvailable = false;
                 break;
@@ -48,5 +71,27 @@ public class CircuitManager : MonoBehaviour
         }
 
         return isAvailable;
+    }
+
+    internal static bool NoBlockingPointsConnected()
+    {
+        bool notConnected = true;
+        foreach(BlockingPoint blockingPoint in allBlockingPoints)
+        {
+            if (blockingPoint.IsConnected)
+                notConnected = false;
+        }
+
+        return notConnected;
+    }
+
+    internal static CircuitPoint GetCircuitPrefab()
+    {
+        return staticCircuitPrefab;
+    }
+
+    internal static BlockingPoint GetBlockingPrefab()
+    {
+        return staticBlockingPrefab;
     }
 }

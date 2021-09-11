@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BoardObjectManager : MonoBehaviour
@@ -33,22 +34,28 @@ public class BoardObjectManager : MonoBehaviour
 
         if (AllObjectsAreConnected())
         {
-            RoundManager.Instance.RoundOver();
+            LevelManager.Instance.RoundOver();
             Debug.Log("COMPLETE!");
         }
     }
 
     public static bool AllObjectsAreConnected()
     {
-        bool isConnected = PanelManager.AreAllPanelsConnected() && CircuitManager.AreAllCircuitsConnected();
+        bool isConnected = PanelManager.AreAllPanelsConnected() && CircuitManager.AreAllCircuitsConnected() && CircuitManager.NoBlockingPointsConnected();
         return isConnected && AreAllObjectsTogether();
     }
 
     private static bool AreAllObjectsTogether()
     {
         int linkCount = GetLinkCount(allBoardObjects);
+        int expectedCount = GetExpectedCount();
 
-        return linkCount == allBoardObjects.Count;
+        return linkCount == expectedCount;
+    }
+
+    private static int GetExpectedCount()
+    {
+        return allBoardObjects.Count - allBoardObjects.Where(x => x.BoardObjectType == BoardObjectType.Blocker).Count();
     }
 
     private static int GetLinkCount(List<IBoardObject> allBoardObjects)
