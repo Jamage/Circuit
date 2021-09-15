@@ -35,6 +35,7 @@ public class BoardObjectManager : MonoBehaviour
         if (AllObjectsAreConnected())
         {
             LevelManager.Instance.RoundOver();
+            LevelSelectManager.Instance.SetLevelComplete();
             Debug.Log("COMPLETE!");
         }
     }

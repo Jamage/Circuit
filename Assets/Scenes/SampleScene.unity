@@ -657,7 +657,7 @@ MonoBehaviour:
   edgeCircuitPointCount: 2
   innerCircuitPointCount: 1
   blockingPointCount: 1
-  isGenerated: 1
+  isGenerated: 0
 --- !u!1 &1690131869
 GameObject:
   m_ObjectHideFlags: 0
@@ -5648,6 +5648,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 2-3 Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 560625246019695602, guid: bcdfce23a57cbd74389fe8a14ae0e65f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 560625246019695613, guid: bcdfce23a57cbd74389fe8a14ae0e65f, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -5749,6 +5753,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 3-4 Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 634630506387791027, guid: d721ad28413d44647b82490c1364f5f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d721ad28413d44647b82490c1364f5f9, type: 3}
 --- !u!1001 &826901669177429174
@@ -5806,6 +5814,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 1-4 Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 826901669564562425, guid: 7206053c91d3b2341a09da3709c73155, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7206053c91d3b2341a09da3709c73155, type: 3}
 --- !u!1001 &3074381066481628696
@@ -5818,6 +5830,10 @@ PrefabInstance:
     - target: {fileID: 3074381066963664907, guid: 5688f0eb86575eb42a4e9e32aec7c2a0, type: 3}
       propertyPath: m_Name
       value: 2-4 Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074381066963664907, guid: 5688f0eb86575eb42a4e9e32aec7c2a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3074381066963664908, guid: 5688f0eb86575eb42a4e9e32aec7c2a0, type: 3}
       propertyPath: m_RootOrder
@@ -5875,6 +5891,10 @@ PrefabInstance:
     - target: {fileID: 6675044610564416512, guid: 64c3ef748c5e2b347a5bc89be9647f3f, type: 3}
       propertyPath: m_Name
       value: 1-2 Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675044610564416512, guid: 64c3ef748c5e2b347a5bc89be9647f3f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6675044610564416519, guid: 64c3ef748c5e2b347a5bc89be9647f3f, type: 3}
       propertyPath: m_RootOrder
@@ -5976,6 +5996,10 @@ PrefabInstance:
     - target: {fileID: 6875568522018038323, guid: 918e9df3f37d4d7418b5a3b8255e4111, type: 3}
       propertyPath: m_Name
       value: 1-3 Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6875568522018038323, guid: 918e9df3f37d4d7418b5a3b8255e4111, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 918e9df3f37d4d7418b5a3b8255e4111, type: 3}

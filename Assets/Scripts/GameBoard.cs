@@ -42,6 +42,7 @@ public class GameBoard : MonoBehaviour
         GameBoardController.Reset(this);
         GenerateBackgroundGrid();
         GenerateCircuitPoints(data.CircuitDataList);
+        GenerateBlockingPoints(data.BlockingDataList);
         GeneratePanels(data.PanelDataList);
     }
 
@@ -58,6 +59,14 @@ public class GameBoard : MonoBehaviour
         foreach (CircuitData circuitData in circuitDataList)
         {
             CircuitPoint.New(circuitData);
+        }
+    }
+
+    private void GenerateBlockingPoints(List<BlockingData> blockingDataList)
+    {
+        foreach (BlockingData blockingData in blockingDataList)
+        {
+            BlockingPoint.New(blockingData);
         }
     }
 

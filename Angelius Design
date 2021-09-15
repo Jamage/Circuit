@@ -1,0 +1,39 @@
+Angelius Design Thoughts
+
+Controls:
+Drag & Drop
+Gamepad select & swap
+
+Goals:
+Puzzle Circuit
+	- Set a Start Point
+	- Set an End Point
+	- Generate a path between the two
+	- Drag and Drop panels to complete the circuit
+		
+
+Variations:
+	- Blocking Points
+	- Blocking Panels (can't place panel here)
+	- Special card slots
+		- Duplication (2 or more panels show the same card when placed)
+		- Merging 2 panel cards (Bitwise check to draw lines)
+	- 
+============================================================
+============================================================
+
+Code Notes:
+
+To Serialize:
+
+Board:
+	RowCount
+	ColumnCount
+	isGenerated
+
+Line Panel:
+	PanelType
+	PositionIndex
+
+
+
