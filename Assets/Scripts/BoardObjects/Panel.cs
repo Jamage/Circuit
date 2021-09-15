@@ -64,6 +64,9 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     private void Setup(PanelData panelData)
     {
         SetPosition(panelData.PositionIndex);
+        RemoveFromConnections();
+        ClearConnections();
+        OnPlacement?.Invoke(this);
     }
 
     private void OnMouseDrag()
@@ -87,7 +90,6 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
                 return;
             }
 
-            transform.position = newPos;
             SetPosition(bgPanel.PositionIndex);
             RemoveFromConnections();
             ClearConnections();
