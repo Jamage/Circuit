@@ -801,7 +801,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleCanvas: {fileID: 1092613273}
-  levelSelectCanvas: {fileID: 1410578425}
 --- !u!1 &1199544657
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,7 +954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1410578426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -970,6 +969,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelDataList:
   - {fileID: 11400000, guid: 1a0331acd0b54fc41ac392c4de896941, type: 2}
+  - {fileID: 11400000, guid: 720f99fb91c776f46bdbf0487317197e, type: 2}
   LevelSelectOptions: {fileID: 669644411}
   LevelSelectButtonPrefab: {fileID: -2781213025743093417, guid: 5d2baad897375514c8d3a79cc9e3324b, type: 3}
   levelCompletionData: []

@@ -16,7 +16,8 @@ public class GameBoard : MonoBehaviour
     public int Width { get; private set; }
     public int Height { get; private set; }
     public bool isGenerated = false;
-
+    private readonly List<GameObject> boardObjectList = new List<GameObject>();
+    
     protected void Awake()
     {
         Width = 2;
@@ -37,6 +38,7 @@ public class GameBoard : MonoBehaviour
 
     public void Setup(LevelData data)
     {
+        Clear();
         rowCount = data.RowCount;
         columnCount = data.ColumnCount;
         GameBoardController.Reset(this);
@@ -46,11 +48,21 @@ public class GameBoard : MonoBehaviour
         GeneratePanels(data.PanelDataList);
     }
 
+    private void Clear()
+    {
+        foreach(GameObject boardObject in boardObjectList)
+        {
+            Destroy(boardObject);
+        }
+        boardObjectList.Clear();
+    }
+
     private void GeneratePanels(List<PanelData> panelDataList)
     {
         foreach (PanelData panelData in panelDataList)
         {
-            Panel.New(panelData);
+            Panel newPanel = Panel.New(panelData);
+            boardObjectList.Add(newPanel.gameObject);
         }
     }
 
@@ -58,7 +70,8 @@ public class GameBoard : MonoBehaviour
     {
         foreach (CircuitData circuitData in circuitDataList)
         {
-            CircuitPoint.New(circuitData);
+            CircuitPoint newPoint = CircuitPoint.New(circuitData);
+            boardObjectList.Add(newPoint.gameObject);
         }
     }
 
@@ -66,7 +79,8 @@ public class GameBoard : MonoBehaviour
     {
         foreach (BlockingData blockingData in blockingDataList)
         {
-            BlockingPoint.New(blockingData);
+            BlockingPoint newPoint = BlockingPoint.New(blockingData);
+            boardObjectList.Add(newPoint.gameObject);
         }
     }
 
@@ -78,6 +92,7 @@ public class GameBoard : MonoBehaviour
             newPoint.name = $"Block {i}";
             newPoint.transform.parent = transform;
             newPoint.InitializeInner();
+            boardObjectList.Add(newPoint.gameObject);
         }
     }
 
@@ -89,6 +104,7 @@ public class GameBoard : MonoBehaviour
             edgePoint.name = $"Edge Point {i}";
             edgePoint.InitializeEdge();
             edgePoint.transform.parent = transform;
+            boardObjectList.Add(edgePoint.gameObject);
         }
     }
 
@@ -100,6 +116,7 @@ public class GameBoard : MonoBehaviour
             innerPoint.name = $"Inner Point {i}";
             innerPoint.transform.parent = transform;
             innerPoint.InitializeInner();
+            boardObjectList.Add(innerPoint.gameObject);
         }
     }
 
@@ -124,6 +141,7 @@ public class GameBoard : MonoBehaviour
                         backgroundZPos);
 
                 bgPanel.transform.parent = transform;
+                boardObjectList.Add(bgPanel.gameObject);
             }
         }
     }

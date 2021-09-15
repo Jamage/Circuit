@@ -40,6 +40,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     private void OnDisable()
     {
         PanelManager.allPanels.Remove(this);
+        BoardObjectManager.allBoardObjects.Remove(this);
     }
 
     public void OnMouseDown()
@@ -52,11 +53,12 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         }
     }
 
-    internal static void New(PanelData panelData)
+    internal static Panel New(PanelData panelData)
     {
         Panel panelPrefab = PanelManager.Get(panelData.PanelType);
         Panel newPanel = Instantiate(panelPrefab, Vector3.zero, panelPrefab.transform.rotation);
         newPanel.Setup(panelData);
+        return newPanel;
     }
 
     private void Setup(PanelData panelData)

@@ -9,12 +9,14 @@ public class LevelDataInspector : Editor
 {
     private SerializedProperty panelDataList;
     private SerializedProperty circuitDataList;
+    private SerializedProperty blockingDataList;
     private SerializedProperty rowCount, columnCount;
 
     private void OnEnable()
     {
         panelDataList = serializedObject.FindProperty("PanelDataList");
         circuitDataList = serializedObject.FindProperty("CircuitDataList");
+        blockingDataList = serializedObject.FindProperty("BlockingDataList");
         rowCount = serializedObject.FindProperty("RowCount");
         columnCount = serializedObject.FindProperty("ColumnCount");
     }
@@ -56,6 +58,7 @@ public class LevelDataInspector : Editor
         DrawGridColumns(width, height, startingX, startingY);
         DrawGridRows(width, height, startingX, startingY);
         DrawLinePanels(width, height, startingX, startingY);
+        DrawBlockingPoints(width, height, startingX, startingY);
         DrawCircuitPoints(width, height, startingX, startingY);
     }
 
@@ -66,14 +69,32 @@ public class LevelDataInspector : Editor
             SerializedProperty circuitData = circuitDataList.GetArrayElementAtIndex(circuitIndex);
             SerializedProperty vectorProperty = circuitData.FindPropertyRelative("PositionIndex");
             Vector2Int positionIndex = vectorProperty.vector2IntValue;
-            Vector3 drawPoint = GetPointOne(positionIndex, width, height, startingX, startingY);
+            Vector3 pointPosition = GetPointOne(positionIndex, width, height, startingX, startingY);
             float dotSize = 10;
             float halfDotSize = dotSize / 2;
             Rect drawingRect = new Rect(
-                drawPoint.x - halfDotSize,
-                drawPoint.y - halfDotSize, dotSize, dotSize);
+                pointPosition.x - halfDotSize,
+                pointPosition.y - halfDotSize, dotSize, dotSize);
 
             EditorGUI.DrawRect(drawingRect, Color.yellow);
+        }
+    }
+
+    private void DrawBlockingPoints(float width, float height, float startingX, float startingY)
+    {
+        for (int blockingIndex = 0; blockingIndex < blockingDataList.arraySize; blockingIndex++)
+        {
+            SerializedProperty blockingData = blockingDataList.GetArrayElementAtIndex(blockingIndex);
+            SerializedProperty vectorProperty = blockingData.FindPropertyRelative("PositionIndex");
+            Vector2Int positionIndex = vectorProperty.vector2IntValue;
+            Vector3 pointPosition = GetPointOne(positionIndex, width, height, startingX, startingY);
+            float dotSize = 14;
+            float halfDotSize = dotSize / 2;
+            Rect drawingRect = new Rect(
+                pointPosition.x - halfDotSize,
+                pointPosition.y - halfDotSize, dotSize, dotSize);
+
+            EditorGUI.DrawRect(drawingRect, Color.red);
         }
     }
 

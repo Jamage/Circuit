@@ -8,18 +8,17 @@ using UnityEditor;
 public class TitleMenu : MonoBehaviour
 {
     public GameObject titleCanvas;
-    public GameObject levelSelectCanvas;
 
     public void GoToTitle()
     {
-        levelSelectCanvas.SetActive(false);
+        LevelSelectManager.Instance.gameObject.SetActive(false);
         titleCanvas.SetActive(true);
     }
 
     public void GoToLevelSelect()
     {
         titleCanvas.SetActive(false);
-        levelSelectCanvas.SetActive(true);
+        LevelSelectManager.Instance.gameObject.SetActive(true);
     }
 
     public void Quit()

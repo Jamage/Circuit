@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
 {
@@ -16,23 +17,24 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
     public List<LevelCompletionSaveData> levelCompletionData;
     public Dictionary<string, LevelCompletionSaveData> levelSaveDataDictionary;
     public static UnityAction OnLevelComplete;
-    private string saveDataFilePath => $"{Application.persistentDataPath}\\levelSaveData.json";
+    private string SaveDataFilePath => $"{Application.persistentDataPath}\\levelSaveData.json";
 
     protected override void Awake()
     {
         base.Awake();
         levelSaveDataDictionary = new Dictionary<string, LevelCompletionSaveData>();
         //If no file, create one with all level data
-        if (File.Exists(saveDataFilePath) == false)
+        if (File.Exists(SaveDataFilePath) == false)
             CreateFreshSaveData();
         LoadSaveData();
         GenerateLevelButtons();
+        gameObject.SetActive(false);
     }
 
     private void LoadSaveData()
     {
         //File exists, load content
-        String[] jsonData = File.ReadAllLines(saveDataFilePath);
+        String[] jsonData = File.ReadAllLines(SaveDataFilePath);
 
         foreach (String jsonLine in jsonData)
         {
@@ -63,7 +65,7 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
             levelSaveDataDictionary.Add(newSaveData.LevelName, newSaveData);
         }
 
-        File.WriteAllText(saveDataFilePath, jsonStringBuild.ToString());
+        File.WriteAllText(SaveDataFilePath, jsonStringBuild.ToString());
     }
 
     private void CreateFreshSaveData()
@@ -77,7 +79,7 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
             levelCompletionData.Add(saveData);
             levelSaveDataDictionary.Add(saveData.LevelName, saveData);
         }
-        File.WriteAllText(saveDataFilePath, jsonData.ToString());
+        File.WriteAllText(SaveDataFilePath, jsonData.ToString());
     }
 
     public void SaveData()
@@ -89,12 +91,11 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
             jsonData.AppendLine(json);
         }
 
-        File.WriteAllText(saveDataFilePath, jsonData.ToString());
+        File.WriteAllText(SaveDataFilePath, jsonData.ToString());
     }
 
     private void GenerateLevelButtons()
     {
-        int index = 0;
         foreach (LevelData levelData in levelDataList)
         {
             LevelSelectButton newButton = Instantiate(LevelSelectButtonPrefab, Vector3.zero, LevelSelectButtonPrefab.transform.rotation, LevelSelectOptions.transform);
@@ -102,14 +103,14 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
             if (levelSaveDataDictionary.ContainsKey(levelData.Name))
                 saveData = levelSaveDataDictionary[levelData.Name];
             newButton.Setup(saveData);
-            newButton.levelSelectButton.onClick.AddListener(() => SelectLevel(index));
+            newButton.levelSelectButton.onClick.AddListener(() => SelectLevel(levelData.Name));
         }
     }
 
-    public void SelectLevel(int levelNumber)
+    public void SelectLevel(string levelName)
     {
-        Debug.Log($"Index: {levelNumber}");
-        selectedLevel = levelDataList[levelNumber];
+        Debug.Log($"Name: {levelName}");
+        selectedLevel = levelDataList.First(level => level.Name == levelName);
         StartCoroutine(LoadScene(selectedLevel));
     }
 

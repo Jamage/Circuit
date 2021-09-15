@@ -1,24 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class LevelManager : GenericSingletonClass<LevelManager>
+public class LevelManager : MonoBehaviour
 {
-    public ParticleSystem roundOverParticles;
-    public TextMeshProUGUI roundOverText;
-    public List<LevelData> levelList;
+    public GameObject levelCompleteCanvas;
+    public Button levelSelectButton;
+    public Button mainMenuButton;
+    public static UnityAction OnLevelComplete;
+
+    private void OnEnable()
+    {
+        OnLevelComplete += RoundOver;
+        levelSelectButton.onClick.AddListener(() => LevelSelectButton_OnClick());
+        mainMenuButton.onClick.AddListener(() => MainMenuButton_OnClick());
+    }
+
+    private void OnDisable()
+    {
+        OnLevelComplete -= RoundOver;
+    }
 
     public void RoundOver()
     {
-        //roundOverParticles.gameObject.SetActive(true);
-        //roundOverText.gameObject.SetActive(true);
+        levelCompleteCanvas.SetActive(true);
     }
 
-    public void SelectLevel(LevelData levelData)
+    public void LevelSelectButton_OnClick()
     {
-        SceneManager.LoadScene("SampleScene");
-        
+        levelCompleteCanvas.SetActive(false);
+        LevelSelectManager.Instance.gameObject.SetActive(true);
+    }
+
+    public void MainMenuButton_OnClick()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
