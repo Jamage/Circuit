@@ -46,15 +46,17 @@ public class PanelManager : MonoBehaviour
     {
         bool allConnected = true;
 
-        foreach(Panel panel in allPanels)
+        foreach (Panel panel in allPanels)
         {
             if (panel.IsConnected == false)
             {
-                Debug.Log($"{panel.name} not connected");
+                //Debug.Log($"{panel.name} not connected");
                 allConnected = false;
             }
             else
-                Debug.Log($"{panel.name} is connected");
+            {
+                //Debug.Log($"{panel.name} is connected");
+            }
         }
 
         return allConnected;

@@ -42,7 +42,7 @@ public class GameBoard : MonoBehaviour
         rowCount = data.RowCount;
         columnCount = data.ColumnCount;
         GameBoardController.Reset(this);
-        GenerateBackgroundGrid();
+        GenerateBackgroundGrid(data.BlockingPanelDataList);
         GenerateCircuitPoints(data.CircuitDataList);
         GenerateBlockingPoints(data.BlockingDataList);
         GeneratePanels(data.PanelDataList);
@@ -131,6 +131,30 @@ public class GameBoard : MonoBehaviour
         {
             for (int row = 0; row < rowCount; row++)
             {
+                BackgroundPanel bgPanel = Instantiate(BackgroundPanelPrefab, transform.position, BackgroundPanelPrefab.transform.rotation);
+                bgPanel.PositionIndex = new Vector2Int(column, row);
+
+                bgPanel.transform.position =
+                    new Vector3(
+                        GameBoardController.XPositionForColumn(column),
+                        GameBoardController.YPositionForRow(row),
+                        backgroundZPos);
+
+                bgPanel.transform.parent = transform;
+                boardObjectList.Add(bgPanel.gameObject);
+            }
+        }
+    }
+
+    private void GenerateBackgroundGrid(List<BlockingPanelData> blockingPanelDataList)
+    {
+        for (int column = 0; column < columnCount; column++)
+        {
+            for (int row = 0; row < rowCount; row++)
+            {
+                if (blockingPanelDataList.Exists(panel => panel.PositionIndex.x == column && panel.PositionIndex.y == row))
+                    continue;
+
                 BackgroundPanel bgPanel = Instantiate(BackgroundPanelPrefab, transform.position, BackgroundPanelPrefab.transform.rotation);
                 bgPanel.PositionIndex = new Vector2Int(column, row);
 

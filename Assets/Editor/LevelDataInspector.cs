@@ -10,6 +10,7 @@ public class LevelDataInspector : Editor
     private SerializedProperty panelDataList;
     private SerializedProperty circuitDataList;
     private SerializedProperty blockingDataList;
+    private SerializedProperty blockingPanelDataList;
     private SerializedProperty rowCount, columnCount;
 
     private void OnEnable()
@@ -17,6 +18,7 @@ public class LevelDataInspector : Editor
         panelDataList = serializedObject.FindProperty("PanelDataList");
         circuitDataList = serializedObject.FindProperty("CircuitDataList");
         blockingDataList = serializedObject.FindProperty("BlockingDataList");
+        blockingPanelDataList = serializedObject.FindProperty("BlockingPanelDataList");
         rowCount = serializedObject.FindProperty("RowCount");
         columnCount = serializedObject.FindProperty("ColumnCount");
     }
@@ -57,6 +59,7 @@ public class LevelDataInspector : Editor
 
         DrawGridColumns(width, height, startingX, startingY);
         DrawGridRows(width, height, startingX, startingY);
+        DrawBlockingPanels(width, height, startingX, startingY);
         DrawLinePanels(width, height, startingX, startingY);
         DrawBlockingPoints(width, height, startingX, startingY);
         DrawCircuitPoints(width, height, startingX, startingY);
@@ -95,6 +98,23 @@ public class LevelDataInspector : Editor
                 pointPosition.y - halfDotSize, dotSize, dotSize);
 
             EditorGUI.DrawRect(drawingRect, Color.red);
+        }
+    }
+
+    private void DrawBlockingPanels(float width, float height, float startingX, float startingY)
+    {
+        for (int blockingPanelIndex = 0; blockingPanelIndex < blockingPanelDataList.arraySize; blockingPanelIndex++)
+        {
+            SerializedProperty blockingPanel = blockingPanelDataList.GetArrayElementAtIndex(blockingPanelIndex);
+            SerializedProperty vectorProperty = blockingPanel.FindPropertyRelative("PositionIndex");
+            Vector2Int positionIndex = vectorProperty.vector2IntValue;
+
+            Vector3 lineStartPos = GetPointOne(positionIndex, width, height, startingX, startingY);
+            Vector3 lineEndPos = GetPointFour(positionIndex, width, height, startingX, startingY);
+            DrawLineFromTo(lineStartPos, lineEndPos, Color.black);
+            lineStartPos = GetPointThree(positionIndex, width, height, startingX, startingY);
+            lineEndPos = GetPointTwo(positionIndex, width, height, startingX, startingY);
+            DrawLineFromTo(lineStartPos, lineEndPos, Color.black);
         }
     }
 
@@ -140,16 +160,16 @@ public class LevelDataInspector : Editor
                     break;
             }
 
-            DrawLineFromTo(lineStartPos, panelCenter);
-            DrawLineFromTo(panelCenter, lineEndPos);
+            DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            DrawLineFromTo(panelCenter, lineEndPos, Color.blue);
         }
     }
 
-    private void DrawLineFromTo(Vector3 lineStartPos, Vector3 lineEndPos)
+    private void DrawLineFromTo(Vector3 lineStartPos, Vector3 lineEndPos, Color color, float thickness = 4f)
     {
         Handles.BeginGUI();
-        Handles.color = Color.blue;
-        Handles.DrawLine(lineStartPos, lineEndPos, 4);
+        Handles.color = color;
+        Handles.DrawLine(lineStartPos, lineEndPos, thickness);
         Handles.EndGUI();
     }
 

@@ -26,12 +26,12 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
         //If no file, create one with all level data
         if (File.Exists(SaveDataFilePath) == false)
             CreateFreshSaveData();
-        LoadSaveData();
+        LoadData();
         GenerateLevelButtons();
         gameObject.SetActive(false);
     }
 
-    private void LoadSaveData()
+    private void LoadData()
     {
         //File exists, load content
         String[] jsonData = File.ReadAllLines(SaveDataFilePath);
@@ -39,8 +39,16 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
         foreach (String jsonLine in jsonData)
         {
             LevelCompletionSaveData saveData = JsonUtility.FromJson<LevelCompletionSaveData>(jsonLine);
-            levelCompletionData.Add(saveData);
+            if (levelSaveDataDictionary.ContainsKey(saveData.LevelName))
+            {
+                levelSaveDataDictionary.Remove(saveData.LevelName);
+                LevelCompletionSaveData dataToRemove = levelCompletionData.First(data => data.LevelName == saveData.LevelName);
+                levelCompletionData.Remove(dataToRemove);
+            }
+            
             levelSaveDataDictionary.Add(saveData.LevelName, saveData);
+            levelCompletionData.Add(saveData);
+
         }
 
         if (jsonData.Length < levelDataList.Count) //Append new level data to save file
@@ -134,5 +142,6 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
         LevelCompletionSaveData saveData = levelSaveDataDictionary[selectedLevel.Name];
         saveData.IsComplete = true;
         SaveData();
+        LoadData();
     }
 }

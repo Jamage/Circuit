@@ -10,7 +10,6 @@ Puzzle Circuit
 	- Set an End Point
 	- Generate a path between the two
 	- Drag and Drop panels to complete the circuit
-		
 
 Variations:
 	- Blocking Points
@@ -29,11 +28,14 @@ To Serialize:
 Board:
 	RowCount
 	ColumnCount
-	isGenerated
 
 Line Panel:
 	PanelType
 	PositionIndex
+	
+Circuit Point:
+	PositionIndex
+	RequiredConnections
 
-
-
+Blocking Point:
+	PositionIndex
