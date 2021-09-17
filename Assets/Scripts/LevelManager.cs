@@ -33,7 +33,7 @@ public class LevelManager : MonoBehaviour
     public void LevelSelectButton_OnClick()
     {
         levelCompleteCanvas.SetActive(false);
-        LevelSelectManager.Instance.gameObject.SetActive(true);
+        LevelSelectManager.Instance.ShowAndSetBackButton(levelCompleteCanvas);
     }
 
     public void MainMenuButton_OnClick()

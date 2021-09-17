@@ -18,7 +18,7 @@ public class TitleMenu : MonoBehaviour
     public void GoToLevelSelect()
     {
         titleCanvas.SetActive(false);
-        LevelSelectManager.Instance.gameObject.SetActive(true);
+        LevelSelectManager.Instance.ShowAndSetBackButton(titleCanvas);
     }
 
     public void Quit()

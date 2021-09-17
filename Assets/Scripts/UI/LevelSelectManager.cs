@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using System.IO;
 using System.Text;
 using System.Linq;
-
+using UnityEngine.UI;
 public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
 {
     public List<LevelData> levelDataList;
@@ -18,11 +18,13 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
     public Dictionary<string, LevelCompletionSaveData> levelSaveDataDictionary;
     public static UnityAction OnLevelComplete;
     private string SaveDataFilePath => $"{Application.persistentDataPath}\\levelSaveData.json";
+    public Button backButton;
 
     protected override void Awake()
     {
         base.Awake();
         levelSaveDataDictionary = new Dictionary<string, LevelCompletionSaveData>();
+        levelCompletionData = new List<LevelCompletionSaveData>();
         //If no file, create one with all level data
         if (File.Exists(SaveDataFilePath) == false)
             CreateFreshSaveData();
@@ -140,8 +142,21 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
     public void SetLevelComplete()
     {
         LevelCompletionSaveData saveData = levelSaveDataDictionary[selectedLevel.Name];
-        saveData.IsComplete = true;
+        saveData.SetComplete();
         SaveData();
         LoadData();
+    }
+
+    public void ShowAndSetBackButton(GameObject toggleForBackButton_OnClick)
+    {
+        gameObject.SetActive(true);
+        backButton.onClick.RemoveAllListeners();
+        backButton.onClick.AddListener(() => Disable());
+        backButton.onClick.AddListener(() => toggleForBackButton_OnClick.SetActive(true));
+    }
+
+    private void Disable()
+    {
+        gameObject.SetActive(false);
     }
 }

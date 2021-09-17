@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,5 +23,12 @@ public class LevelSelectButton : MonoBehaviour
     {
         buttonText.text = levelSaveData.LevelName;
         levelCompleteToggle.isOn = levelSaveData.IsComplete;
+        levelSaveData.OnComplete = null;
+        levelSaveData.OnComplete += OnLevelComplete;
+    }
+
+    private void OnLevelComplete()
+    {
+        levelCompleteToggle.isOn = true;
     }
 }
