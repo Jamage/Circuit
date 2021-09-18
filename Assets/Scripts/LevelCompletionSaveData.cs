@@ -22,4 +22,9 @@ public class LevelCompletionSaveData
         IsComplete = true;
         OnComplete?.Invoke();
     }
+
+    internal void Update(LevelCompletionSaveData saveData)
+    {
+        IsComplete = saveData.IsComplete;
+    }
 }

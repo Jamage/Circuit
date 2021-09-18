@@ -43,14 +43,14 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
             LevelCompletionSaveData saveData = JsonUtility.FromJson<LevelCompletionSaveData>(jsonLine);
             if (levelSaveDataDictionary.ContainsKey(saveData.LevelName))
             {
-                levelSaveDataDictionary.Remove(saveData.LevelName);
-                LevelCompletionSaveData dataToRemove = levelCompletionData.First(data => data.LevelName == saveData.LevelName);
-                levelCompletionData.Remove(dataToRemove);
+                levelSaveDataDictionary[saveData.LevelName].Update(saveData);
+                levelCompletionData.First(data => data.LevelName == saveData.LevelName).Update(saveData);
             }
-            
-            levelSaveDataDictionary.Add(saveData.LevelName, saveData);
-            levelCompletionData.Add(saveData);
-
+            else
+            {
+                levelSaveDataDictionary.Add(saveData.LevelName, saveData);
+                levelCompletionData.Add(saveData);
+            }
         }
 
         if (jsonData.Length < levelDataList.Count) //Append new level data to save file
