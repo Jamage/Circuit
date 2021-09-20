@@ -36,17 +36,16 @@ public class BoardObjectManager : MonoBehaviour
         {
             LevelSelectManager.Instance.SetLevelComplete();
             LevelManager.OnLevelComplete?.Invoke();
-            Debug.Log("COMPLETE!");
         }
     }
 
-    public static bool AllObjectsAreConnected()
+    public bool AllObjectsAreConnected()
     {
         bool isConnected = PanelManager.AreAllPanelsConnected() && CircuitManager.AreAllCircuitsConnected() && CircuitManager.NoBlockingPointsConnected();
         return isConnected && AreAllObjectsTogether();
     }
 
-    private static bool AreAllObjectsTogether()
+    private bool AreAllObjectsTogether()
     {
         int linkCount = GetLinkCount(allBoardObjects);
         int expectedCount = GetExpectedCount();
@@ -54,12 +53,12 @@ public class BoardObjectManager : MonoBehaviour
         return linkCount == expectedCount;
     }
 
-    private static int GetExpectedCount()
+    private int GetExpectedCount()
     {
         return allBoardObjects.Count - allBoardObjects.Where(x => x.BoardObjectType == BoardObjectType.Blocker).Count();
     }
 
-    private static int GetLinkCount(List<IBoardObject> allBoardObjects)
+    private int GetLinkCount(List<IBoardObject> allBoardObjects)
     {
         IBoardObject startingObject = allBoardObjects[0];
         List<IBoardObject> checkedObjects = new List<IBoardObject>
@@ -72,7 +71,7 @@ public class BoardObjectManager : MonoBehaviour
 
     }
 
-    private static void RecursivelyChain(IBoardObject linkedObject, List<IBoardObject> checkedObjects)
+    private void RecursivelyChain(IBoardObject linkedObject, List<IBoardObject> checkedObjects)
     {
         foreach (IBoardObject connectedObject in linkedObject.ConnectedObjectsAt.Keys)
         {

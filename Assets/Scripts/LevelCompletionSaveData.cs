@@ -9,22 +9,28 @@ public class LevelCompletionSaveData
 {
     public string LevelName;
     public bool IsComplete;
-    [NonSerialized] public UnityAction OnComplete;
+    public int TurnsTaken;
+    [NonSerialized] public UnityAction<int> OnComplete;
 
     public LevelCompletionSaveData(LevelData levelData)
     {
         LevelName = levelData.Name;
         IsComplete = false;
+        TurnsTaken = 0;
     }
 
-    public void SetComplete()
+    public void SetComplete(int currentTurnCount)
     {
         IsComplete = true;
-        OnComplete?.Invoke();
+        if(TurnsTaken > currentTurnCount || TurnsTaken == 0)
+            TurnsTaken = currentTurnCount;
+        OnComplete?.Invoke(TurnsTaken);
     }
 
-    internal void Update(LevelCompletionSaveData saveData)
+    internal void Update(LevelCompletionSaveData newSaveData)
     {
-        IsComplete = saveData.IsComplete;
+        IsComplete = newSaveData.IsComplete;
+        if(TurnsTaken > newSaveData.TurnsTaken || TurnsTaken == 0)
+            TurnsTaken = newSaveData.TurnsTaken;
     }
 }

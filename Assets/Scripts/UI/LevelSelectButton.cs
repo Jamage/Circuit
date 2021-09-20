@@ -8,6 +8,7 @@ public class LevelSelectButton : MonoBehaviour
     public Toggle levelCompleteToggle;
     public Button levelSelectButton;
     public TextMeshProUGUI buttonText;
+    public TextMeshProUGUI turnCountText;
 
     private void Awake()
     {
@@ -25,10 +26,12 @@ public class LevelSelectButton : MonoBehaviour
         levelCompleteToggle.isOn = levelSaveData.IsComplete;
         levelSaveData.OnComplete = null;
         levelSaveData.OnComplete += OnLevelComplete;
+        turnCountText.text = $"Turns: {levelSaveData.TurnsTaken}";
     }
 
-    private void OnLevelComplete()
+    private void OnLevelComplete(int turnsTaken)
     {
         levelCompleteToggle.isOn = true;
+        turnCountText.text = $"Turns: {turnsTaken}";
     }
 }

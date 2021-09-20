@@ -142,7 +142,7 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
     public void SetLevelComplete()
     {
         LevelCompletionSaveData saveData = levelSaveDataDictionary[selectedLevel.Name];
-        saveData.SetComplete();
+        saveData.SetComplete(TurnManager.turnCounter);
         SaveData();
         LoadData();
     }

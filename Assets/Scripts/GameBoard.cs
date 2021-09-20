@@ -34,6 +34,7 @@ public class GameBoard : MonoBehaviour
         GenerateInnerCircuitPoints();
         GenerateBlockingPoints();
         GenerateSolutionPanels();
+        TurnManager.ResetTurnCounter();
     }
 
     public void Setup(LevelData data)
@@ -46,6 +47,7 @@ public class GameBoard : MonoBehaviour
         GenerateCircuitPoints(data.CircuitDataList);
         GenerateBlockingPoints(data.BlockingDataList);
         GeneratePanels(data.PanelDataList);
+        TurnManager.ResetTurnCounter();
     }
 
     private void Clear()
