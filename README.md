@@ -1,2 +1,2 @@
 # Tri-Anglus
- Line connecting game using cards on a grid
+ Connect circuit points together on a grid by dragging and dropping line cards into place! 
