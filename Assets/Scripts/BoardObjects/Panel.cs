@@ -69,7 +69,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     {
         if (dragging == false)
         {
-            selectionHighlight?.MouseEntered();
+            selectionHighlight.MouseEntered();
         }
     }
 
@@ -77,13 +77,13 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     {
         if (dragging == false)
         {
-            selectionHighlight?.MouseExited();
+            selectionHighlight.MouseExited();
         }
     }
 
     public void OnMouseDown()
     {
-        selectionHighlight?.MouseExited();
+        selectionHighlight.MouseExited();
         startPosition = transform.position;
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Panel"));
         if (hit.collider != null)
@@ -108,7 +108,6 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             Vector3 newPos = bgHit.transform.position;
             newPos.z = 0;
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
-
             if (PanelManager.IsOccupied(bgPanel.PositionIndex))
             {
                 transform.position = startPosition;
@@ -142,7 +141,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         if (hit.collider != null)
         {
             Panel mouseOverPanel = hit.collider.GetComponent<Panel>();
-            mouseOverPanel.selectionHighlight?.MouseEntered();
+            mouseOverPanel.selectionHighlight.MouseEntered();
         }
     }
 

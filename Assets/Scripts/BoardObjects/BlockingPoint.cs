@@ -15,6 +15,9 @@ public class BlockingPoint : MonoBehaviour, IBoardObject
     public Edge Edge { get => edge; set => edge = value; }
     [SerializeField] private Edge edge;
     [SerializeField] private bool UseEdge = true;
+    public SpriteRenderer[] spriteRenderers;
+    [SerializeField] private Color disconnectedColor = Color.green;
+    [SerializeField] private Color connectedColor;
 
     private void Awake()
     {
@@ -85,9 +88,27 @@ public class BlockingPoint : MonoBehaviour, IBoardObject
     public void UpdateConnectionStatus()
     {
         if (ConnectedObjectsAt.Count > RequiredConnections)
-            IsConnected = true;
+            Connect();
         else
-            IsConnected = false;
+            Disconnect();
+    }
+
+    private void Connect()
+    {
+        IsConnected = true;
+        foreach(SpriteRenderer renderer in spriteRenderers)
+        {
+            renderer.color = connectedColor;
+        }
+    }
+
+    private void Disconnect()
+    {
+        IsConnected = false;
+        foreach (SpriteRenderer renderer in spriteRenderers)
+        {
+            renderer.color = disconnectedColor;
+        }
     }
 
     private void SetRandomPosition()

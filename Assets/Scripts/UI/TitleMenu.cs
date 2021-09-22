@@ -8,10 +8,12 @@ using UnityEditor;
 public class TitleMenu : MonoBehaviour
 {
     public GameObject titleCanvas;
+    public GameObject howToPlay;
 
     public void GoToTitle()
     {
         LevelSelectManager.Instance.gameObject.SetActive(false);
+        howToPlay.SetActive(false);
         titleCanvas.SetActive(true);
     }
 
@@ -19,6 +21,12 @@ public class TitleMenu : MonoBehaviour
     {
         titleCanvas.SetActive(false);
         LevelSelectManager.Instance.ShowAndSetBackButton(titleCanvas);
+    }
+
+    public void GoToHowToPlay()
+    {
+        titleCanvas.SetActive(false);
+        howToPlay.SetActive(true);
     }
 
     public void Quit()

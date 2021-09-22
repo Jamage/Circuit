@@ -6,4 +6,13 @@ public class BackgroundPanel : MonoBehaviour
 {
     public Vector2Int PositionIndex;
 
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
 }
