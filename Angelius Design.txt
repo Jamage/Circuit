@@ -16,7 +16,7 @@ Variations:
 	- Blocking Panels (can't place panel here)
 	- Special card slots
 		- Duplication (2 or more panels show the same card when placed)
-		- Merging 2 panel cards (Bitwise check to draw lines)
+		- Playing different panel cards on the same slot
 	- 
 ============================================================
 ============================================================
@@ -45,3 +45,5 @@ Blocking Point:
 QA Questions:
 - Would it be interesting to know how many solutions there are to a puzzle, and which one's you've claimed?
 - 
+
+

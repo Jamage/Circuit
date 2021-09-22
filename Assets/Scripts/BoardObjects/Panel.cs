@@ -21,6 +21,10 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     public static UnityAction<IBoardObject> OnPlacement;
     private Vector3 startPosition;
     private Vector2 dragOffsetPoint;
+    public Material disconnectedMaterial;
+    public Material connectedMaterial;
+    public PanelSelectionHighlight selectionHighlight;
+    public static bool dragging = false;
 
     void Awake()
     {
@@ -29,6 +33,8 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         ConnectedObjectsAt = new Dictionary<IBoardObject, List<Vector2Int>>();
         IsConnected = false;
         RequiredConnections = 2;
+        if (selectionHighlight == null)
+            selectionHighlight = GetComponentInChildren<PanelSelectionHighlight>();
     }
 
     private void OnEnable()
@@ -41,16 +47,6 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     {
         PanelManager.allPanels.Remove(this);
         BoardObjectManager.allBoardObjects.Remove(this);
-    }
-
-    public void OnMouseDown()
-    {
-        startPosition = transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Panel"));
-        if (hit.collider != null)
-        {
-            dragOffsetPoint = (Vector2)transform.position - hit.point;
-        }
     }
 
     internal static Panel New(PanelData panelData)
@@ -69,6 +65,35 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         OnPlacement?.Invoke(this);
     }
 
+    public void OnMouseOver()
+    {
+        if (dragging == false)
+        {
+            selectionHighlight?.MouseEntered();
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (dragging == false)
+        {
+            selectionHighlight?.MouseExited();
+        }
+    }
+
+    public void OnMouseDown()
+    {
+        selectionHighlight?.MouseExited();
+        startPosition = transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Panel"));
+        if (hit.collider != null)
+        {
+            dragOffsetPoint = (Vector2)transform.position - hit.point;
+        }
+
+        dragging = true;
+    }
+
     private void OnMouseDrag()
     {
         Vector3 mousePos = Input.mousePosition;
@@ -77,28 +102,32 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 
     public void OnMouseUp()
     {
+        dragging = false;
         RaycastHit2D bgHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Background"));
         if (bgHit.collider != null)
         {
             Vector3 newPos = bgHit.transform.position;
             newPos.z = 0;
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
-            
+
             if (PanelManager.IsOccupied(bgPanel.PositionIndex))
             {
                 transform.position = startPosition;
-                return;
             }
-
-            SetPosition(bgPanel.PositionIndex);
-            RemoveFromConnections();
-            ClearConnections();
-            OnPlacement?.Invoke(this);
+            else
+            {
+                selectionHighlight?.MouseEntered();
+                SetPosition(bgPanel.PositionIndex);
+                RemoveFromConnections();
+                ClearConnections();
+                OnPlacement?.Invoke(this);
+            }
         }
         else
         {
             transform.position = startPosition;
         }
+
     }
 
     private void ClearConnections()
@@ -149,10 +178,59 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 
     public void UpdateConnectionStatus()
     {
-        if (ConnectionCount() >= RequiredConnections)
-            IsConnected = true;
+        if (ConnectionCount() >= RequiredConnections && IsNotBlocked())
+            Connect();
         else
-            IsConnected = false;
+            Disconnect();
+    }
+
+    private bool IsNotBlocked() => IsBlocked() == false;
+
+    private bool IsBlocked()
+    {
+        bool isTouchingBlocker = false;
+
+        foreach(IBoardObject boardObject in ConnectedObjectsAt.Keys)
+        {
+            if (boardObject.BoardObjectType == BoardObjectType.Blocker)
+                isTouchingBlocker = true;
+        }
+
+        return isTouchingBlocker;
+    }
+
+    private void Disconnect()
+    {
+        if (IsConnected == false)
+            return;
+
+        IsConnected = false;
+        SetDisconnectedMaterial();
+    }
+
+    private void SetDisconnectedMaterial()
+    {
+        foreach(LineRenderer line in innerLines)
+        {
+            line.material = disconnectedMaterial;
+        }
+    }
+
+    private void Connect()
+    {
+        if (IsConnected)
+            return;
+
+        IsConnected = true;
+        SetConnectedMaterial();
+    }
+
+    private void SetConnectedMaterial()
+    {
+        foreach(LineRenderer line in innerLines)
+        {
+            line.material = connectedMaterial;
+        }
     }
 
     public void AddConnection(IBoardObject connectedObject, List<Vector2Int> connectedOn)
