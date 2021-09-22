@@ -65,7 +65,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         OnPlacement?.Invoke(this);
     }
 
-    public void OnMouseOver()
+    public void OnMouseEnter()
     {
         if (dragging == false)
         {
@@ -102,7 +102,6 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 
     public void OnMouseUp()
     {
-        dragging = false;
         RaycastHit2D bgHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Background"));
         if (bgHit.collider != null)
         {
@@ -116,7 +115,6 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             }
             else
             {
-                selectionHighlight?.MouseEntered();
                 SetPosition(bgPanel.PositionIndex);
                 RemoveFromConnections();
                 ClearConnections();
@@ -128,6 +126,24 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             transform.position = startPosition;
         }
 
+        StartCoroutine(TurnOffDragging());
+    }
+
+    private IEnumerator TurnOffDragging()
+    {
+        yield return new WaitForSeconds(.04f);
+        dragging = false;
+        SelectMouseOver();
+    }
+
+    private void SelectMouseOver()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Panel"));
+        if (hit.collider != null)
+        {
+            Panel mouseOverPanel = hit.collider.GetComponent<Panel>();
+            mouseOverPanel.selectionHighlight?.MouseEntered();
+        }
     }
 
     private void ClearConnections()
