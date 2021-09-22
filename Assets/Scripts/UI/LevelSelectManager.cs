@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using UnityEngine.UI;
+
 public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
 {
     public List<LevelData> levelDataList;

@@ -16,6 +16,9 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
     [HideInInspector] public BoardObjectType BoardObjectType => BoardObjectType.Circuit;
     [HideInInspector] public int RequiredConnections { get; private set; }
     public Dictionary<IBoardObject, List<Vector2Int>> ConnectedObjectsAt { get; private set; }
+    private Color disconnectedColor = Color.white;
+    private Color connectedColor = Color.green;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
@@ -23,6 +26,8 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
         LinePoints = new List<Vector2Int>();
         ConnectedObjectsAt = new Dictionary<IBoardObject, List<Vector2Int>>();
         RequiredConnections = 1;
+        if(spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -96,9 +101,21 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
     public void UpdateConnectionStatus()
     {
         if (ConnectedObjectsAt.Count >= RequiredConnections)
-            IsConnected = true;
+            SetConnected();
         else
-            IsConnected = false;
+            SetDisconnected();
+    }
+
+    private void SetConnected()
+    {
+        IsConnected = true;
+        spriteRenderer.color = connectedColor;
+    }
+
+    private void SetDisconnected()
+    {
+        IsConnected = false;
+        spriteRenderer.color = disconnectedColor;
     }
 
     public void AddConnection(IBoardObject connectedObject, List<Vector2Int> connectedOn)
