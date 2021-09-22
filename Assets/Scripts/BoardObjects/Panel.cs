@@ -108,6 +108,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             Vector3 newPos = bgHit.transform.position;
             newPos.z = 0;
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
+            
             if (PanelManager.IsOccupied(bgPanel.PositionIndex))
             {
                 transform.position = startPosition;
