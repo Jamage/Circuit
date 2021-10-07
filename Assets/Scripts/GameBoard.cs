@@ -59,6 +59,12 @@ public class GameBoard : MonoBehaviour
         boardObjectList.Clear();
     }
 
+    public void Reset()
+    {
+        Clear();
+        Setup(LevelSelectManager.selectedLevel);
+    }
+
     private void GeneratePanels(List<PanelData> panelDataList)
     {
         foreach (PanelData panelData in panelDataList)
