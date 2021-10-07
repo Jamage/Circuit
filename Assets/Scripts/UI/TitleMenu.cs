@@ -34,6 +34,8 @@ public class TitleMenu : MonoBehaviour
         LevelSelectManager.Instance.SaveData();
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
+#elif UNITY_WEBGL
+        return;
 #else
         Application.Quit();
 #endif
