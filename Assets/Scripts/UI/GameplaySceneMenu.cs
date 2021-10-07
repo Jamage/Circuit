@@ -43,6 +43,8 @@ public class GameplaySceneMenu : MonoBehaviour
     public void LevelSelectButton_OnClick()
     {
         levelCompleteText.gameObject.SetActive(false);
+        gameBoard.gameObject.SetActive(false);
+        ToggleMenuButtons(false);
         LevelSelectManager.Instance.ShowAndSetBackButton(gameObject);
     }
 
