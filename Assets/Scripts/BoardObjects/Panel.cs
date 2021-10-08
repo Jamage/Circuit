@@ -131,7 +131,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 
     private IEnumerator TurnOffDragging()
     {
-        yield return new WaitForSeconds(.04f);
+        yield return new WaitForSeconds(.06f);
         dragging = false;
         SelectMouseOver();
     }
