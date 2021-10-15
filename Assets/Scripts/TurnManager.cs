@@ -20,9 +20,16 @@ public class TurnManager : MonoBehaviour
         ResetTurnCounter();
     }
 
+    //OnPlacement
     private void IncrementTurnCounter(IBoardObject placedObject)
     {
         turnCounter++;
+    }
+
+    //OnSwap
+    private void DecrementTurnCounter(IBoardObject placedObject)
+    {
+        turnCounter--;
     }
 
     public static void ResetTurnCounter()

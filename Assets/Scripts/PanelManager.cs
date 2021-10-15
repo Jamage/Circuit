@@ -62,14 +62,17 @@ public class PanelManager : MonoBehaviour
         return allConnected;
     }
 
-    internal static bool IsOccupied(Vector2Int positionIndex)
+    internal static bool IsOccupied(Vector2Int positionIndex, out Panel occupyingPanel)
     {
+        occupyingPanel = null;
         bool isOccupied = false;
+
         foreach(Panel linePanel in allPanels)
         {
             if(linePanel.PositionIndex == positionIndex)
             {
                 isOccupied = true;
+                occupyingPanel = linePanel;
                 break;
             }
         }

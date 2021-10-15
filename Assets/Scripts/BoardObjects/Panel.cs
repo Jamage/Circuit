@@ -53,16 +53,8 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     {
         Panel panelPrefab = PanelManager.Get(panelData.PanelType);
         Panel newPanel = Instantiate(panelPrefab, Vector3.zero, panelPrefab.transform.rotation);
-        newPanel.Setup(panelData);
+        PlaceAt(newPanel, panelData.PositionIndex);
         return newPanel;
-    }
-
-    private void Setup(PanelData panelData)
-    {
-        SetPosition(panelData.PositionIndex);
-        RemoveFromConnections();
-        ClearConnections();
-        OnPlacement?.Invoke(this);
     }
 
     public void OnMouseEnter()
@@ -109,16 +101,17 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             newPos.z = 0;
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
             
-            if (PanelManager.IsOccupied(bgPanel.PositionIndex))
+            if (PanelManager.IsOccupied(bgPanel.PositionIndex, out Panel occupyingPanel))
             {
-                transform.position = startPosition;
+                // SWAP
+                PlaceAt(occupyingPanel, PositionIndex);
+                PlaceAt(this, bgPanel.PositionIndex);
+                
+                //transform.position = startPosition;
             }
             else
             {
-                SetPosition(bgPanel.PositionIndex);
-                RemoveFromConnections();
-                ClearConnections();
-                OnPlacement?.Invoke(this);
+                PlaceAt(this, bgPanel.PositionIndex);
             }
         }
         else
@@ -127,6 +120,14 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         }
 
         StartCoroutine(TurnOffDragging());
+    }
+
+    private static void PlaceAt(Panel panelToPlace, Vector2Int positionIndex)
+    {
+        panelToPlace.SetPosition(positionIndex);
+        panelToPlace.RemoveFromConnections();
+        panelToPlace.ClearConnections();
+        OnPlacement?.Invoke(panelToPlace);
     }
 
     private IEnumerator TurnOffDragging()
