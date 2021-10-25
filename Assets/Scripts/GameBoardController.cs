@@ -25,6 +25,12 @@ public static class GameBoardController
         return new Vector3(XPositionForColumn(positionIndex.x), YPositionForRow(positionIndex.y), 0);
     }
 
+    internal static Vector3 GetNewPositionFor(Vector2Int positionIndex)
+    {
+        //Debug.Log($"Position: ({positionIndex.x},{positionIndex.y}) Pos: ({XPositionForColumn(positionIndex.x) / 2}, {YPositionForRow(positionIndex.y) / 2})");
+        return new Vector3(XLinePositionForColumn(positionIndex.x), YLinePositionForRow(positionIndex.y) , 0);
+    }
+
     public static Vector2Int GetRandomIndexPosition()
     {
         return new Vector2Int(RandomColumnIndex(), RandomRowIndex());
@@ -80,11 +86,23 @@ public static class GameBoardController
         return positionStart.x + (column * width);
     }
 
+    //-3 + (2 * 1) = -1 / 2 = -.5
+    //
+
     public static float YPositionForRow(int row)
     {
         return positionStart.y - (row * height);
     }
 
+    public static float XLinePositionForColumn(int column)
+    {
+        return positionStart.x + (column * 3);
+    }
+
+    public static float YLinePositionForRow(int row)
+    {
+        return positionStart.y - (row * 1.5f);
+    }
 
     public static float RandomXPosition()
     {
@@ -108,41 +126,33 @@ public static class GameBoardController
         return UnityEngine.Random.Range(0, rowCount + 1);
     }
 
-    internal static List<Vector2Int> GetConnectingPoints(Vector2Int positionIndex, PanelType panelType)
+    internal static List<Vector2Int> GetConnectingPoints(Vector2Int positionIndex, LinePanelType panelType)
     {
         List<Vector2Int> connectingPoints = new List<Vector2Int>();
-        
-        //Panel Corners
-        //1  2
-        //3  4
 
-        switch (panelType)
-        {
-            case PanelType.OneTwo:
-                connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y));
-                connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y));
-                break;
-            case PanelType.OneThree:
-                connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y));
-                connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y + 1));
-                break;
-            case PanelType.OneFour:
-                connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y));
-                connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y + 1));
-                break;
-            case PanelType.TwoThree:
-                connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y));
-                connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y + 1));
-                break;
-            case PanelType.TwoFour:
-                connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y));
-                connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y + 1));
-                break;
-            case PanelType.ThreeFour:
-                connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y + 1));
-                connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y + 1));
-                break;
-        }
+        //Panel Positions
+        //1  2  3
+        //4  5  6
+        //7  8  9
+
+        if (panelType.HasFlag(LinePanelType.One))
+            connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y));
+        //if (panelType.HasFlag(LinePanelType.Two))
+            //connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y));
+        if (panelType.HasFlag(LinePanelType.Three))
+            connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y));
+        //if (panelType.HasFlag(LinePanelType.Four))
+            //connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y + 1));
+        //if(panelType.HasFlag(LinePanelType.Five))
+            //connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y + 1));
+        //if (panelType.HasFlag(LinePanelType.Six))
+            //connectingPoints.Add(new Vector2Int(positionIndex.x + 2, positionIndex.y + 1));
+        if (panelType.HasFlag(LinePanelType.Seven))
+            connectingPoints.Add(new Vector2Int(positionIndex.x, positionIndex.y + 1));
+        //if (panelType.HasFlag(LinePanelType.Eight))
+            //connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y + 1));
+        if (panelType.HasFlag(LinePanelType.Nine))
+            connectingPoints.Add(new Vector2Int(positionIndex.x + 1, positionIndex.y + 1));
 
         return connectingPoints;
     }

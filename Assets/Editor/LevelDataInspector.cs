@@ -15,7 +15,7 @@ public class LevelDataInspector : Editor
 
     private void OnEnable()
     {
-        panelDataList = serializedObject.FindProperty("PanelDataList");
+        panelDataList = serializedObject.FindProperty("LinePanelDataList");
         circuitDataList = serializedObject.FindProperty("CircuitDataList");
         blockingDataList = serializedObject.FindProperty("BlockingDataList");
         blockingPanelDataList = serializedObject.FindProperty("BlockingPanelDataList");
@@ -110,10 +110,10 @@ public class LevelDataInspector : Editor
             Vector2Int positionIndex = vectorProperty.vector2IntValue;
 
             Vector3 lineStartPos = GetPointOne(positionIndex, width, height, startingX, startingY);
-            Vector3 lineEndPos = GetPointFour(positionIndex, width, height, startingX, startingY);
+            Vector3 lineEndPos = GetPointNine(positionIndex, width, height, startingX, startingY);
             DrawLineFromTo(lineStartPos, lineEndPos, Color.black);
-            lineStartPos = GetPointThree(positionIndex, width, height, startingX, startingY);
-            lineEndPos = GetPointTwo(positionIndex, width, height, startingX, startingY);
+            lineStartPos = GetPointSeven(positionIndex, width, height, startingX, startingY);
+            lineEndPos = GetPointThree(positionIndex, width, height, startingX, startingY);
             DrawLineFromTo(lineStartPos, lineEndPos, Color.black);
         }
     }
@@ -125,43 +125,53 @@ public class LevelDataInspector : Editor
             SerializedProperty panel = panelDataList.GetArrayElementAtIndex(panelIndex);
             SerializedProperty vectorProperty = panel.FindPropertyRelative("PositionIndex");
             Vector2Int positionIndex = vectorProperty.vector2IntValue;
-            PanelType panelType = (PanelType)panel.FindPropertyRelative("PanelType").enumValueIndex;
-
+            LinePanelType panelType = (LinePanelType)panel.FindPropertyRelative("PanelType").intValue;
+            
             float panelCenterX = startingX + (width / 2) + (width * positionIndex.x);
             float panelCenterY = startingY + (height / 2) + (height * positionIndex.y);
             Vector3 panelCenter = new Vector3(panelCenterX, panelCenterY, 0);
-            Vector3 lineStartPos = Vector3.zero;
-            Vector3 lineEndPos = Vector3.zero;
-            switch (panelType)
+
+            if (panelType.HasFlag(LinePanelType.One))
             {
-                case PanelType.OneTwo:
-                    lineStartPos = GetPointOne(positionIndex, width, height, startingX, startingY);
-                    lineEndPos = GetPointTwo(positionIndex, width, height, startingX, startingY);
-                    break;
-                case PanelType.OneThree:
-                    lineStartPos = GetPointOne(positionIndex, width, height, startingX, startingY);
-                    lineEndPos = GetPointThree(positionIndex, width, height, startingX, startingY);
-                    break;
-                case PanelType.OneFour:
-                    lineStartPos = GetPointOne(positionIndex, width, height, startingX, startingY);
-                    lineEndPos = GetPointFour(positionIndex, width, height, startingX, startingY);
-                    break;
-                case PanelType.TwoThree:
-                    lineStartPos = GetPointTwo(positionIndex, width, height, startingX, startingY);
-                    lineEndPos = GetPointThree(positionIndex, width, height, startingX, startingY);
-                    break;
-                case PanelType.TwoFour:
-                    lineStartPos = GetPointTwo(positionIndex, width, height, startingX, startingY);
-                    lineEndPos = GetPointFour(positionIndex, width, height, startingX, startingY);
-                    break;
-                case PanelType.ThreeFour:
-                    lineStartPos = GetPointThree(positionIndex, width, height, startingX, startingY);
-                    lineEndPos = GetPointFour(positionIndex, width, height, startingX, startingY);
-                    break;
+                Vector3 lineStartPos = GetPointOne(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Two))
+            {
+                Vector3 lineStartPos = GetPointTwo(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Three))
+            {
+                Vector3 lineStartPos = GetPointThree(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Four))
+            {
+                Vector3 lineStartPos = GetPointFour(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Six))
+            {
+                Vector3 lineStartPos = GetPointSix(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Seven))
+            {
+                Vector3 lineStartPos = GetPointSeven(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Eight))
+            {
+                Vector3 lineStartPos = GetPointEight(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
+            }
+            if (panelType.HasFlag(LinePanelType.Nine))
+            {
+                Vector3 lineStartPos = GetPointNine(positionIndex, width, height, startingX, startingY);
+                DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
             }
 
-            DrawLineFromTo(lineStartPos, panelCenter, Color.blue);
-            DrawLineFromTo(panelCenter, lineEndPos, Color.blue);
         }
     }
 
@@ -184,7 +194,7 @@ public class LevelDataInspector : Editor
 
     private Vector3 GetPointTwo(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
     {
-        float xPos = startingX + (positionIndex.x + 1) * width;
+        float xPos = startingX + (positionIndex.x + .5f) * width;
         float yPos = startingY + positionIndex.y * height;
 
         Vector3 pointTwo = new Vector3(xPos, yPos, 0);
@@ -193,8 +203,8 @@ public class LevelDataInspector : Editor
 
     private Vector3 GetPointThree(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
     {
-        float xPos = startingX + positionIndex.x * width;
-        float yPos = startingY + (positionIndex.y + 1) * height;
+        float xPos = startingX + (positionIndex.x + 1) * width;
+        float yPos = startingY + positionIndex.y * height;
 
         Vector3 pointThree = new Vector3(xPos, yPos, 0);
         return pointThree;
@@ -202,11 +212,47 @@ public class LevelDataInspector : Editor
 
     private Vector3 GetPointFour(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
     {
-        float xPos = startingX + (positionIndex.x + 1) * width;
-        float yPos = startingY + (positionIndex.y + 1) * height;
+        float xPos = startingX + positionIndex.x * width;
+        float yPos = startingY + (positionIndex.y + .5f) * height;
 
         Vector3 pointFour = new Vector3(xPos, yPos, 0);
         return pointFour;
+    }
+
+    private Vector3 GetPointSix(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
+    {
+        float xPos = startingX + (positionIndex.x + 1) * width;
+        float yPos = startingY + (positionIndex.y + .5f) * height;
+
+        Vector3 pointSix = new Vector3(xPos, yPos, 0);
+        return pointSix;
+    }
+
+    private Vector3 GetPointSeven(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
+    {
+        float xPos = startingX + positionIndex.x * width;
+        float yPos = startingY + (positionIndex.y + 1) * height;
+
+        Vector3 pointSeven = new Vector3(xPos, yPos, 0);
+        return pointSeven;
+    }
+
+    private Vector3 GetPointEight(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
+    {
+        float xPos = startingX + (positionIndex.x + .5f) * width;
+        float yPos = startingY + (positionIndex.y + 1) * height;
+
+        Vector3 pointEight = new Vector3(xPos, yPos, 0);
+        return pointEight;
+    }
+
+    private Vector3 GetPointNine(Vector2Int positionIndex, float width, float height, float startingX, float startingY)
+    {
+        float xPos = startingX + (positionIndex.x + 1) * width;
+        float yPos = startingY + (positionIndex.y + 1) * height;
+
+        Vector3 pointNine = new Vector3(xPos, yPos, 0);
+        return pointNine;
     }
 
     private void DrawGridRows(float width, float height, float startingX, float startingY)

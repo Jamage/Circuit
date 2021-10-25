@@ -2,8 +2,8 @@
 using UnityEngine;
 
 [Serializable]
-public class PanelData
+public class LinePanelData
 {
     public Vector2Int PositionIndex;
-    public PanelType PanelType;
+    public LinePanelType PanelType;
 }

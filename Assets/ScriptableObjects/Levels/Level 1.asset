@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8875c1a79eb8447478d9c6e178b9029f, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
-  Name: Level 1
   RowCount: 2
   ColumnCount: 2
-  PanelDataList:
+  LinePanelDataList:
   - PositionIndex: {x: 1, y: 0}
-    PanelType: 2
+    PanelType: 257
   - PositionIndex: {x: 1, y: 1}
-    PanelType: 1
+    PanelType: 65
   - PositionIndex: {x: 0, y: 0}
-    PanelType: 5
+    PanelType: 320
   CircuitDataList:
   - PositionIndex: {x: 0, y: 0}
     RequiredConnections: 1
   - PositionIndex: {x: 2, y: 2}
     RequiredConnections: 1
+  BlockingDataList: []
+  BlockingPanelDataList: []

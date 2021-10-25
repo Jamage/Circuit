@@ -495,13 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aabe931a95e738489aa04803d373f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelPrefabs:
-  - {fileID: 6675044610564416518, guid: 64c3ef748c5e2b347a5bc89be9647f3f, type: 3}
-  - {fileID: 6875568522018038321, guid: 918e9df3f37d4d7418b5a3b8255e4111, type: 3}
-  - {fileID: 826901669564562407, guid: 7206053c91d3b2341a09da3709c73155, type: 3}
-  - {fileID: 560625246019695612, guid: bcdfce23a57cbd74389fe8a14ae0e65f, type: 3}
-  - {fileID: 3074381066963664909, guid: 5688f0eb86575eb42a4e9e32aec7c2a0, type: 3}
-  - {fileID: 634630506387791181, guid: d721ad28413d44647b82490c1364f5f9, type: 3}
+  linePanelPrefab: {fileID: 7180598335629632780, guid: 723cc7fb25236de4c84274f902bc7c57, type: 3}
   InnerLineWidth: 0.08
   BorderLineWidth: 0.04
 --- !u!4 &523271887
@@ -634,8 +628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a827e90630398e04d85f0ef3d3e01602, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSelectButton: {fileID: 1746209999}
-  mainMenuButton: {fileID: 1602285358}
   gameplaySceneMenu: {fileID: 1942960561}
 --- !u!1 &1159181874
 GameObject:

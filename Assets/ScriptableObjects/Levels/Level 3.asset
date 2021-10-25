@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RowCount: 3
   ColumnCount: 3
-  PanelDataList:
+  LinePanelDataList:
   - PositionIndex: {x: 2, y: 0}
-    PanelType: 1
+    PanelType: 65
   - PositionIndex: {x: 0, y: 0}
-    PanelType: 1
+    PanelType: 65
   - PositionIndex: {x: 2, y: 1}
-    PanelType: 2
+    PanelType: 257
   - PositionIndex: {x: 1, y: 2}
-    PanelType: 4
+    PanelType: 260
   - PositionIndex: {x: 0, y: 2}
-    PanelType: 3
+    PanelType: 68
   - PositionIndex: {x: 2, y: 2}
-    PanelType: 4
+    PanelType: 260
   CircuitDataList:
   - PositionIndex: {x: 1, y: 2}
     RequiredConnections: 1

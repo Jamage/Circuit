@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RowCount: 2
   ColumnCount: 2
-  PanelDataList:
-  - PositionIndex: {x: 1, y: 0}
-    PanelType: 2
+  LinePanelDataList:
   - PositionIndex: {x: 0, y: 0}
-    PanelType: 3
+    PanelType: 68
+  - PositionIndex: {x: 1, y: 0}
+    PanelType: 257
   CircuitDataList:
   - PositionIndex: {x: 0, y: 1}
     RequiredConnections: 1
@@ -27,3 +27,4 @@ MonoBehaviour:
   BlockingDataList:
   - PositionIndex: {x: 1, y: 0}
   - PositionIndex: {x: 1, y: 1}
+  BlockingPanelDataList: []

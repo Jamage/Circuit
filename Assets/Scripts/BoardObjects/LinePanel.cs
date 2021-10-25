@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [SelectionBase()]
-public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
+public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 {
     public String Name => name;
-    public PanelType panelType = PanelType.OneTwo;
+    public LinePanelType panelType = LinePanelType.One | LinePanelType.Three;
     public LineRenderer[] borderLines = new LineRenderer[4];
     public LineRenderer[] innerLines = new LineRenderer[2];
+
     public Vector2Int PositionIndex { get; private set; }
     public List<Vector2Int> LinePoints { get; private set; }
     public bool IsConnected { get; set; }
@@ -19,12 +20,14 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     public Dictionary<IBoardObject, List<Vector2Int>> ConnectedObjectsAt { get; private set; }
 
     public static UnityAction<IBoardObject> OnPlacement;
+    public static UnityAction<IBoardObject, IBoardObject> OnSwap;
     private Vector3 startPosition;
     private Vector2 dragOffsetPoint;
     public Material disconnectedMaterial;
     public Material connectedMaterial;
     public PanelSelectionHighlight selectionHighlight;
     public static bool dragging = false;
+    [SerializeField] private RopeBridge ropeLines;
 
     void Awake()
     {
@@ -35,24 +38,35 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         RequiredConnections = 2;
         if (selectionHighlight == null)
             selectionHighlight = GetComponentInChildren<PanelSelectionHighlight>();
+        if (ropeLines == null)
+            ropeLines = GetComponentInChildren<RopeBridge>();
     }
 
     private void OnEnable()
     {
-        PanelManager.allPanels.Add(this);
+        PanelManager.allLinePanels.Add(this);
         BoardObjectManager.allBoardObjects.Add(this);
     }
 
     private void OnDisable()
     {
-        PanelManager.allPanels.Remove(this);
+        PanelManager.allLinePanels.Remove(this);
         BoardObjectManager.allBoardObjects.Remove(this);
     }
 
-    internal static Panel New(PanelData panelData)
+    void OnValidate()
     {
-        Panel panelPrefab = PanelManager.Get(panelData.PanelType);
-        Panel newPanel = Instantiate(panelPrefab, Vector3.zero, panelPrefab.transform.rotation);
+        if (ropeLines != null)
+        {
+            ropeLines.SetupFrom(panelType);
+        }
+    }
+
+    internal static LinePanel New(LinePanelData panelData)
+    {
+        LinePanel panelPrefab = PanelManager.GetLinePanel();
+        LinePanel newPanel = Instantiate(panelPrefab, Vector3.zero, panelPrefab.transform.rotation);
+        newPanel.panelType = panelData.PanelType;
         PlaceAt(newPanel, panelData.PositionIndex);
         return newPanel;
     }
@@ -101,12 +115,12 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
             newPos.z = 0;
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
             
-            if (PanelManager.IsOccupied(bgPanel.PositionIndex, out Panel occupyingPanel))
+            if (PanelManager.IsOccupied(bgPanel.PositionIndex, out LinePanel occupyingPanel))
             {
                 // SWAP
+                OnSwap?.Invoke(this, occupyingPanel);
                 PlaceAt(occupyingPanel, PositionIndex);
                 PlaceAt(this, bgPanel.PositionIndex);
-                
                 //transform.position = startPosition;
             }
             else
@@ -122,7 +136,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         StartCoroutine(TurnOffDragging());
     }
 
-    private static void PlaceAt(Panel panelToPlace, Vector2Int positionIndex)
+    private static void PlaceAt(LinePanel panelToPlace, Vector2Int positionIndex)
     {
         panelToPlace.SetPosition(positionIndex);
         panelToPlace.RemoveFromConnections();
@@ -142,7 +156,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Panel"));
         if (hit.collider != null)
         {
-            Panel mouseOverPanel = hit.collider.GetComponent<Panel>();
+            LinePanel mouseOverPanel = hit.collider.GetComponent<LinePanel>();
             mouseOverPanel.selectionHighlight.MouseEntered();
         }
     }
@@ -164,6 +178,7 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     private void SetPosition(Vector2Int positionIndex)
     {
         PositionIndex = positionIndex;
+        ropeLines.SetupFrom(panelType);
         transform.position = GameBoardController.GetPositionFor(PositionIndex);
         LinePoints.Clear();
         LinePoints.AddRange(GameBoardController.GetConnectingPoints(PositionIndex, panelType));
@@ -280,12 +295,17 @@ public class Panel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     }
 }
 
-public enum PanelType
+[Flags] public enum LinePanelType
 {
-    OneTwo,
-    OneThree,
-    OneFour,
-    TwoThree,
-    TwoFour,
-    ThreeFour
+    None = 0,
+    One = 1,
+    Two = 2,
+    Three = 4,
+    Four = 8,
+    Five = 16,
+    Six = 32,
+    Seven = 64,
+    Eight = 128,
+    Nine = 256,
+    OneThree = One | Three
 }

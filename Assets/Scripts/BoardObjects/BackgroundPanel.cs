@@ -10,9 +10,4 @@ public class BackgroundPanel : MonoBehaviour
     {
         
     }
-
-    private void OnDisable()
-    {
-        
-    }
 }

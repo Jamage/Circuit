@@ -10,13 +10,15 @@ public class TurnManager : MonoBehaviour
     private void OnEnable()
     {
         ResetTurnCounter();
-        Panel.OnPlacement += IncrementTurnCounter;
+        LinePanel.OnPlacement += IncrementTurnCounter;
+        LinePanel.OnSwap += DecrementTurnCounter;
     }
 
 
     private void OnDisable()
     {
-        Panel.OnPlacement -= IncrementTurnCounter;
+        LinePanel.OnPlacement -= IncrementTurnCounter;
+        LinePanel.OnSwap -= DecrementTurnCounter;
         ResetTurnCounter();
     }
 
@@ -27,7 +29,7 @@ public class TurnManager : MonoBehaviour
     }
 
     //OnSwap
-    private void DecrementTurnCounter(IBoardObject placedObject)
+    private void DecrementTurnCounter(IBoardObject placedObject, IBoardObject occupyingObject)
     {
         turnCounter--;
     }

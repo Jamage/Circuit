@@ -5,30 +5,21 @@ using UnityEngine;
 
 public class PanelManager : MonoBehaviour
 {
-    public List<Panel> panelPrefabs;
-    public static Dictionary<PanelType, Panel> prefabDictionary;
-    public static List<Panel> allPanels = new List<Panel>();
+    public static List<LinePanel> allLinePanels = new List<LinePanel>();
+    public LinePanel linePanelPrefab;
+    public static LinePanel staticLinePanelPrefab;
     public float InnerLineWidth = .04f;
     public float BorderLineWidth = .04f;
 
     private void Awake()
     {
-        SetupDictionary();
         SetAllLineWidths();
-    }
-
-    private void SetupDictionary()
-    {
-        prefabDictionary = new Dictionary<PanelType, Panel>();
-        foreach(Panel prefab in panelPrefabs)
-        {
-            prefabDictionary.Add(prefab.panelType, prefab);
-        }
+        staticLinePanelPrefab = linePanelPrefab;
     }
 
     private void SetAllLineWidths()
     {
-        foreach (Panel panel in allPanels)
+        foreach (LinePanel panel in allLinePanels)
         {
             foreach (LineRenderer line in panel.innerLines)
             {
@@ -46,7 +37,7 @@ public class PanelManager : MonoBehaviour
     {
         bool allConnected = true;
 
-        foreach (Panel panel in allPanels)
+        foreach (LinePanel panel in allLinePanels)
         {
             if (panel.IsConnected == false)
             {
@@ -62,14 +53,14 @@ public class PanelManager : MonoBehaviour
         return allConnected;
     }
 
-    internal static bool IsOccupied(Vector2Int positionIndex, out Panel occupyingPanel)
+    internal static bool IsOccupied(Vector2Int positionIndex, out LinePanel occupyingPanel)
     {
         occupyingPanel = null;
         bool isOccupied = false;
 
-        foreach(Panel linePanel in allPanels)
+        foreach (LinePanel linePanel in allLinePanels)
         {
-            if(linePanel.PositionIndex == positionIndex)
+            if (linePanel.PositionIndex == positionIndex)
             {
                 isOccupied = true;
                 occupyingPanel = linePanel;
@@ -80,8 +71,8 @@ public class PanelManager : MonoBehaviour
         return isOccupied;
     }
 
-    internal static Panel Get(PanelType panelType)
+    internal static LinePanel GetLinePanel()
     {
-        return prefabDictionary[panelType];
+        return staticLinePanelPrefab;
     }
 }

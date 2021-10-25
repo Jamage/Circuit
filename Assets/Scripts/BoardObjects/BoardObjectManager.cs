@@ -10,12 +10,12 @@ public class BoardObjectManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Panel.OnPlacement += HandleConnections;
+        LinePanel.OnPlacement += HandleConnections;
     }
 
     private void OnDisable()
     {
-        Panel.OnPlacement -= HandleConnections;
+        LinePanel.OnPlacement -= HandleConnections;
     }
 
     public void HandleConnections(IBoardObject placedObject)

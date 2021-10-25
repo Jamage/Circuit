@@ -23,10 +23,13 @@ public class GameBoard : MonoBehaviour
         Width = 2;
         Height = 1;
         GameBoardController.Reset(this);
+    }
+
+    private void Start()
+    {
         if (isGenerated)
             Generate();
     }
-
     public void Generate()
     {
         GenerateBackgroundGrid();
@@ -46,7 +49,7 @@ public class GameBoard : MonoBehaviour
         GenerateBackgroundGrid(data.BlockingPanelDataList);
         GenerateCircuitPoints(data.CircuitDataList);
         GenerateBlockingPoints(data.BlockingDataList);
-        GeneratePanels(data.PanelDataList);
+        GeneratePanels(data.LinePanelDataList);
         TurnManager.ResetTurnCounter();
     }
 
@@ -65,11 +68,11 @@ public class GameBoard : MonoBehaviour
         Setup(LevelSelectManager.selectedLevel);
     }
 
-    private void GeneratePanels(List<PanelData> panelDataList)
+    private void GeneratePanels(List<LinePanelData> panelDataList)
     {
-        foreach (PanelData panelData in panelDataList)
+        foreach (LinePanelData linePanelData in panelDataList)
         {
-            Panel newPanel = Panel.New(panelData);
+            LinePanel newPanel = LinePanel.New(linePanelData);
             newPanel.transform.SetParent(transform);
             boardObjectList.Add(newPanel.gameObject);
         }
