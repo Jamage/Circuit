@@ -68,6 +68,7 @@ public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         LinePanel newPanel = Instantiate(panelPrefab, Vector3.zero, panelPrefab.transform.rotation);
         newPanel.panelType = panelData.PanelType;
         PlaceAt(newPanel, panelData.PositionIndex);
+        newPanel.ropeLines.SetupFrom(newPanel.panelType);
         return newPanel;
     }
 
@@ -111,17 +112,17 @@ public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
         RaycastHit2D bgHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Background"));
         if (bgHit.collider != null)
         {
-            Vector3 newPos = bgHit.transform.position;
-            newPos.z = 0;
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
-            
-            if (PanelManager.IsOccupied(bgPanel.PositionIndex, out LinePanel occupyingPanel))
+            if(bgPanel.PositionIndex == PositionIndex)
+            {
+                transform.position = startPosition;
+            }
+            else if (PanelManager.IsOccupied(bgPanel.PositionIndex, out LinePanel occupyingPanel))
             {
                 // SWAP
                 OnSwap?.Invoke(this, occupyingPanel);
                 PlaceAt(occupyingPanel, PositionIndex);
                 PlaceAt(this, bgPanel.PositionIndex);
-                //transform.position = startPosition;
             }
             else
             {
@@ -178,8 +179,7 @@ public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     private void SetPosition(Vector2Int positionIndex)
     {
         PositionIndex = positionIndex;
-        ropeLines.SetupFrom(panelType);
-        transform.position = GameBoardController.GetPositionFor(PositionIndex);
+        transform.localPosition = GameBoardController.GetPositionFor(PositionIndex);
         LinePoints.Clear();
         LinePoints.AddRange(GameBoardController.GetConnectingPoints(PositionIndex, panelType));
     }

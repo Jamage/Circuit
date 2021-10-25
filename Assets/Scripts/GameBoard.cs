@@ -30,6 +30,7 @@ public class GameBoard : MonoBehaviour
         if (isGenerated)
             Generate();
     }
+
     public void Generate()
     {
         GenerateBackgroundGrid();
@@ -37,7 +38,7 @@ public class GameBoard : MonoBehaviour
         GenerateInnerCircuitPoints();
         GenerateBlockingPoints();
         GenerateSolutionPanels();
-        SetScale(GameBoardController.maxWidthScale, GameBoardController.maxHeightScale);
+        SetScale();
         TurnManager.ResetTurnCounter();
     }
 
@@ -51,7 +52,7 @@ public class GameBoard : MonoBehaviour
         GenerateCircuitPoints(data.CircuitDataList);
         GenerateBlockingPoints(data.BlockingDataList);
         GeneratePanels(data.LinePanelDataList);
-        SetScale(GameBoardController.maxWidthScale, GameBoardController.maxHeightScale);
+        SetScale();
         TurnManager.ResetTurnCounter();
     }
 
@@ -67,12 +68,13 @@ public class GameBoard : MonoBehaviour
     public void Reset()
     {
         Clear();
+        transform.localScale = Vector3.one;
         Setup(LevelSelectManager.selectedLevel);
     }
 
-    public void SetScale(float xScale, float yScale)
+    public void SetScale()
     {
-        this.transform.localScale = new Vector3(xScale, yScale, 1);
+        this.transform.localScale = new Vector3(GameBoardController.maxWidthScale, GameBoardController.maxHeightScale, 1);
     }
 
     private void GeneratePanels(List<LinePanelData> panelDataList)

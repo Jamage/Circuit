@@ -9,7 +9,7 @@ public class RopeBridge : MonoBehaviour
     private readonly List<RopeSegment> ropeSegments = new List<RopeSegment>();
     [SerializeField] private float ropeSegLength = 0.25f;
     [SerializeField] private int segmentCount = 35;
-    [SerializeField] float lineWidth = 0.1f;
+    //[SerializeField] float lineWidth = 0.1f;
     [SerializeField] Vector2 forceGravity = new Vector2(0, -1);
     [SerializeField] bool useGravity = true;
     [SerializeField] int precision = 40;
@@ -37,6 +37,7 @@ public class RopeBridge : MonoBehaviour
 
     private void Update()
     {
+        SetAnchors(true);
         DrawRope();
     }
 
@@ -47,9 +48,9 @@ public class RopeBridge : MonoBehaviour
 
     private void DrawRope()
     {
-        float lineWidth = this.lineWidth;
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
+        //float lineWidth = this.lineWidth;
+        //lineRenderer.startWidth = lineWidth;
+        //lineRenderer.endWidth = lineWidth;
 
         Vector3[] ropePositions = new Vector3[this.segmentCount];
         for (int i = 0; i < this.segmentCount; i++)
@@ -112,7 +113,7 @@ public class RopeBridge : MonoBehaviour
         }
     }
 
-    private void SetAnchors()
+    private void SetAnchors(bool onlyEnds = false)
     {
         if (anchorPoints.Count == 0)
             return;
@@ -124,6 +125,8 @@ public class RopeBridge : MonoBehaviour
             anchorSegments[index] = this.ropeSegments[segment];
             anchorSegments[index].posNow = anchorPoints[index] + parentTransform.position;
             ropeSegments[segment] = anchorSegments[index];
+            if (onlyEnds)
+                break;
         }
 
         anchorSegments[anchorPoints.Count - 1] = ropeSegments[segmentCount - 1];
@@ -133,7 +136,7 @@ public class RopeBridge : MonoBehaviour
 
     private void OnValidate()
     {
-        lineWidth = Mathf.Clamp(lineWidth, .01f, 10);
+        //lineWidth = Mathf.Clamp(lineWidth, .01f, 10);
         segmentCount = Mathf.Clamp(segmentCount, 1, int.MaxValue);
         ropeSegLength = Mathf.Clamp(ropeSegLength, .001f, float.MaxValue);
         precision = Mathf.Clamp(precision, 1, 100);

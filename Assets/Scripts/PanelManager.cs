@@ -13,12 +13,17 @@ public class PanelManager : MonoBehaviour
 
     private void Awake()
     {
-        SetAllLineWidths();
         staticLinePanelPrefab = linePanelPrefab;
+        SetAllLineWidths();
     }
 
     private void SetAllLineWidths()
     {
+        foreach(LineRenderer line in staticLinePanelPrefab.innerLines)
+                line.widthCurve = new AnimationCurve(new Keyframe(0, InnerLineWidth));
+        foreach (LineRenderer line in staticLinePanelPrefab.borderLines)
+            line.widthCurve = new AnimationCurve(new Keyframe(0, BorderLineWidth));
+
         foreach (LinePanel panel in allLinePanels)
         {
             foreach (LineRenderer line in panel.innerLines)

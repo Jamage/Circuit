@@ -10,8 +10,8 @@ public static class GameBoardController
     public static int height, width;
     public static int columnCount, rowCount;
     public static Vector2 positionStart;
-    public static float maxHeightScale = 7.4f;
-    public static float maxWidthScale = 14.8f;
+    public static float maxHeightScale;
+    public static float maxWidthScale;
 
     public static void Reset(GameBoard gameBoard)
     {
@@ -19,14 +19,21 @@ public static class GameBoardController
         width = gameBoard.Width;
         columnCount = gameBoard.columnCount;
         rowCount = gameBoard.rowCount;
-        positionStart = new Vector2((-columnCount * (float)width) / 2, ((float)rowCount * (float)height) / 2);
         SetScale();
+        SetStartPosition();
+    }
+
+    private static void SetStartPosition()
+    {
+        float xPos = (-columnCount * (float)width) / 2;
+        float yPos = ((float)rowCount * (float)height) / 2;
+        positionStart = new Vector2(xPos, yPos);
     }
 
     private static void SetScale()
     {
-        maxHeightScale /= (rowCount * height);
-        maxWidthScale /= (columnCount * width);
+        maxHeightScale = 6.9f / rowCount;
+        maxWidthScale = 6.9f / columnCount;
         if (maxHeightScale < maxWidthScale)
         {
             maxWidthScale = maxHeightScale;
@@ -38,12 +45,6 @@ public static class GameBoardController
     internal static Vector3 GetPositionFor(Vector2Int positionIndex)
     {
         return new Vector3(XPositionForColumn(positionIndex.x), YPositionForRow(positionIndex.y), 0);
-    }
-
-    internal static Vector3 GetNewPositionFor(Vector2Int positionIndex)
-    {
-        //Debug.Log($"Position: ({positionIndex.x},{positionIndex.y}) Pos: ({XPositionForColumn(positionIndex.x) / 2}, {YPositionForRow(positionIndex.y) / 2})");
-        return new Vector3(XLinePositionForColumn(positionIndex.x), YLinePositionForRow(positionIndex.y) , 0);
     }
 
     public static Vector2Int GetRandomIndexPosition()
@@ -101,22 +102,9 @@ public static class GameBoardController
         return positionStart.x + (column * width);
     }
 
-    //-3 + (2 * 1) = -1 / 2 = -.5
-    //
-
     public static float YPositionForRow(int row)
     {
         return positionStart.y - (row * height);
-    }
-
-    public static float XLinePositionForColumn(int column)
-    {
-        return positionStart.x + (column * 3);
-    }
-
-    public static float YLinePositionForRow(int row)
-    {
-        return positionStart.y - (row * 1.5f);
     }
 
     public static float RandomXPosition()
