@@ -10,6 +10,8 @@ public static class GameBoardController
     public static int height, width;
     public static int columnCount, rowCount;
     public static Vector2 positionStart;
+    public static float maxHeightScale = 7.4f;
+    public static float maxWidthScale = 14.8f;
 
     public static void Reset(GameBoard gameBoard)
     {
@@ -17,7 +19,20 @@ public static class GameBoardController
         width = gameBoard.Width;
         columnCount = gameBoard.columnCount;
         rowCount = gameBoard.rowCount;
-        positionStart = new Vector2((-columnCount * width) / 2, (rowCount * height) / 2);
+        positionStart = new Vector2((-columnCount * (float)width) / 2, ((float)rowCount * (float)height) / 2);
+        SetScale();
+    }
+
+    private static void SetScale()
+    {
+        maxHeightScale /= (rowCount * height);
+        maxWidthScale /= (columnCount * width);
+        if (maxHeightScale < maxWidthScale)
+        {
+            maxWidthScale = maxHeightScale;
+        }
+        else
+            maxHeightScale = maxWidthScale;
     }
 
     internal static Vector3 GetPositionFor(Vector2Int positionIndex)

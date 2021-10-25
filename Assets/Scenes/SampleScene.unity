@@ -927,13 +927,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3490b926a447ac340bdf7ff6a3d10283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columnCount: 3
-  rowCount: 4
+  columnCount: 2
+  rowCount: 2
   BackgroundPanelPrefab: {fileID: 966736340745693088, guid: ad2f344886a283d4db7c0a744cf8812c, type: 3}
   edgeCircuitPointCount: 2
   innerCircuitPointCount: 1
   blockingPointCount: 1
-  isGenerated: 0
+  isGenerated: 1
 --- !u!1 &1574906069
 GameObject:
   m_ObjectHideFlags: 0

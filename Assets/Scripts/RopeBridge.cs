@@ -6,7 +6,7 @@ using UnityEngine;
 public class RopeBridge : MonoBehaviour
 {
     private LineRenderer lineRenderer;
-    private List<RopeSegment> ropeSegments = new List<RopeSegment>();
+    private readonly List<RopeSegment> ropeSegments = new List<RopeSegment>();
     [SerializeField] private float ropeSegLength = 0.25f;
     [SerializeField] private int segmentCount = 35;
     [SerializeField] float lineWidth = 0.1f;
@@ -93,8 +93,7 @@ public class RopeBridge : MonoBehaviour
 
             float dist = (firstSeg.posNow - secondSeg.posNow).magnitude;
             float error = dist - ropeSegLength;
-            Vector2 changeDir = Vector2.zero;
-
+            Vector2 changeDir; 
             changeDir = (firstSeg.posNow - secondSeg.posNow).normalized;
 
             Vector2 changeAmount = changeDir * error;

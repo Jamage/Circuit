@@ -26,7 +26,7 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
         LinePoints = new List<Vector2Int>();
         ConnectedObjectsAt = new Dictionary<IBoardObject, List<Vector2Int>>();
         RequiredConnections = 1;
-        if(spriteRenderer == null)
+        if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         disconnectedColor = spriteRenderer.color;
     }
@@ -59,12 +59,22 @@ public class CircuitPoint : MonoBehaviour, IEquatable<IBoardObject>, IBoardObjec
 
     private void SetRandomPosition()
     {
+        byte maxAttempts = 36;
+        byte setAttempts = 0;
         do
         {
             SetRandomIndex();
+            setAttempts++;
         }
-        while (CircuitManager.IsAvailable(this) == false);
+        while (CircuitManager.IsAvailable(this) == false && setAttempts < maxAttempts);
 
+        if (setAttempts == maxAttempts)
+        {
+            Destroy(this.gameObject);
+            Debug.LogWarning($"Failed to generate Circuit Point, no positions available");
+            return;
+        }
+     
         transform.position = GameBoardController.GetPositionFor(PositionIndex);
     }
 

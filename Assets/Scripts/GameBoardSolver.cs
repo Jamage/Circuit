@@ -10,7 +10,7 @@ public class GameBoardSolver
     public int columns;
     private readonly int maxPanels, minPanels;
     //No Panels should have been generated, only circuit points
-    public List<IBoardObject> allBoardObjects => BoardObjectManager.allBoardObjects;
+    public List<IBoardObject> AllBoardObjects => BoardObjectManager.allBoardObjects;
 
     public GameBoardSolver(GameBoard gameBoard)
     {
@@ -120,7 +120,7 @@ public class GameBoardSolver
 
     public void Solve()
     {
-        IBoardObject startingCircuit = allBoardObjects.First(item => item.BoardObjectType == BoardObjectType.Circuit);
+        IBoardObject startingCircuit = AllBoardObjects.First(item => item.BoardObjectType == BoardObjectType.Circuit);
         Vector2Int startingPosition = startingCircuit.PositionIndex;
 
     }

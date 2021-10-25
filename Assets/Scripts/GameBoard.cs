@@ -37,6 +37,7 @@ public class GameBoard : MonoBehaviour
         GenerateInnerCircuitPoints();
         GenerateBlockingPoints();
         GenerateSolutionPanels();
+        SetScale(GameBoardController.maxWidthScale, GameBoardController.maxHeightScale);
         TurnManager.ResetTurnCounter();
     }
 
@@ -50,6 +51,7 @@ public class GameBoard : MonoBehaviour
         GenerateCircuitPoints(data.CircuitDataList);
         GenerateBlockingPoints(data.BlockingDataList);
         GeneratePanels(data.LinePanelDataList);
+        SetScale(GameBoardController.maxWidthScale, GameBoardController.maxHeightScale);
         TurnManager.ResetTurnCounter();
     }
 
@@ -66,6 +68,11 @@ public class GameBoard : MonoBehaviour
     {
         Clear();
         Setup(LevelSelectManager.selectedLevel);
+    }
+
+    public void SetScale(float xScale, float yScale)
+    {
+        this.transform.localScale = new Vector3(xScale, yScale, 1);
     }
 
     private void GeneratePanels(List<LinePanelData> panelDataList)
@@ -106,7 +113,8 @@ public class GameBoard : MonoBehaviour
             newPoint.name = $"Block {i}";
             newPoint.transform.SetParent(transform);
             newPoint.InitializeInner();
-            boardObjectList.Add(newPoint.gameObject);
+            if(newPoint != null)
+                boardObjectList.Add(newPoint.gameObject);
         }
     }
 
@@ -118,7 +126,8 @@ public class GameBoard : MonoBehaviour
             edgePoint.name = $"Edge Point {i}";
             edgePoint.InitializeEdge();
             edgePoint.transform.SetParent(transform);
-            boardObjectList.Add(edgePoint.gameObject);
+            if(edgePoint != null)
+                boardObjectList.Add(edgePoint.gameObject);
         }
     }
 
@@ -130,7 +139,8 @@ public class GameBoard : MonoBehaviour
             innerPoint.name = $"Inner Point {i}";
             innerPoint.transform.SetParent(transform);
             innerPoint.InitializeInner();
-            boardObjectList.Add(innerPoint.gameObject);
+            if(innerPoint != null)
+                boardObjectList.Add(innerPoint.gameObject);
         }
     }
 

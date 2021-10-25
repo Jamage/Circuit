@@ -36,10 +36,10 @@ public class BlockingPoint : MonoBehaviour, IBoardObject
         BoardObjectManager.allBoardObjects.Remove(this);
     }
 
-    private void Initialize()
-    {
-        PositionIndex = GameBoardController.GetRandomIndexPosition();
-    }
+    //private void Initialize()
+    //{
+    //    PositionIndex = GameBoardController.GetRandomIndexPosition();
+    //}
 
     public static BlockingPoint New(BlockingData blockingData)
     {
@@ -113,12 +113,22 @@ public class BlockingPoint : MonoBehaviour, IBoardObject
 
     private void SetRandomPosition()
     {
+        byte maxAttempts = 36;
+        byte setAttempts = 0;
         do
         {
             SetRandomIndex();
+            setAttempts++;
         }
-        while (CircuitManager.IsAvailable(this) == false);
+        while (CircuitManager.IsAvailable(this) == false && setAttempts < maxAttempts);
 
+        if (setAttempts == maxAttempts)
+        {
+            Destroy(this.gameObject);
+            Debug.LogWarning($"Failed to generate Blocking Point, no positions available");
+            return;
+        }
+         
         transform.position = GameBoardController.GetPositionFor(PositionIndex);
     }
 
