@@ -148,12 +148,13 @@ public class LevelSelectManager : GenericSingletonClass<LevelSelectManager>
         LoadData();
     }
 
-    public void ShowAndSetBackButton(GameObject toggleForBackButton_OnClick)
+    public void ShowAndSetBackButton(params GameObject[] toggleForBackButton_OnClick)
     {
         gameObject.SetActive(true);
         backButton.onClick.RemoveAllListeners();
         backButton.onClick.AddListener(() => Disable());
-        backButton.onClick.AddListener(() => toggleForBackButton_OnClick.SetActive(true));
+        foreach(GameObject toggleObject in toggleForBackButton_OnClick)
+            backButton.onClick.AddListener(() => toggleObject.SetActive(true));
     }
 
     private void Disable()

@@ -14,6 +14,7 @@ public class GameplaySceneMenu : MonoBehaviour
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private GameBoard gameBoard;
     [SerializeField] private TextMeshProUGUI levelCompleteText;
+    [SerializeField] private TextMeshProUGUI turnCounterText;
 
     private void Awake()
     {
@@ -29,6 +30,8 @@ public class GameplaySceneMenu : MonoBehaviour
             gameBoard = GameObject.Find("Game Board").GetComponent<GameBoard>();
         if (levelCompleteText == null)
             levelCompleteText = GameObject.Find("Complete Text").GetComponent<TextMeshProUGUI>();
+        if (turnCounterText == null)
+            turnCounterText = GameObject.Find("Turn Counter Text").GetComponent<TextMeshProUGUI>();
 
         menuButton.onClick.AddListener(() => MenuButton_OnClick());
         levelSelectButton.onClick.AddListener(() => LevelSelectButton_OnClick());
@@ -42,10 +45,9 @@ public class GameplaySceneMenu : MonoBehaviour
 
     public void LevelSelectButton_OnClick()
     {
-        levelCompleteText.gameObject.SetActive(false);
         gameBoard.gameObject.SetActive(false);
-        ToggleMenuButtons(false);
-        LevelSelectManager.Instance.ShowAndSetBackButton(gameObject);
+        LevelSelectManager.Instance.ShowAndSetBackButton(gameObject, gameBoard.gameObject);
+        gameObject.SetActive(false);
     }
 
     public void MenuButton_OnClick()

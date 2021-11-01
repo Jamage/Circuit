@@ -28,6 +28,7 @@ public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
     public PanelSelectionHighlight selectionHighlight;
     public static bool dragging = false;
     [SerializeField] private RopeBridge ropeLines;
+    [HideInInspector] public bool canDrag = true;
 
     void Awake()
     {
@@ -90,6 +91,12 @@ public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 
     public void OnMouseDown()
     {
+        if (canDrag)
+            StartDrag();
+    }
+
+    private void StartDrag()
+    {
         selectionHighlight.MouseExited();
         startPosition = transform.position;
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Panel"));
@@ -103,17 +110,29 @@ public class LinePanel : MonoBehaviour, IEquatable<IBoardObject>, IBoardObject
 
     private void OnMouseDrag()
     {
+        if (canDrag)
+            Drag();
+    }
+
+    private void Drag()
+    {
         Vector3 mousePos = Input.mousePosition;
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(mousePos + (Vector3.forward * 10)) + dragOffsetPoint;
     }
 
     public void OnMouseUp()
     {
+        if(canDrag)
+            EndDrag();
+    }
+
+    private void EndDrag()
+    {
         RaycastHit2D bgHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 20, LayerMask.GetMask("Background"));
         if (bgHit.collider != null)
         {
             BackgroundPanel bgPanel = bgHit.collider.GetComponent<BackgroundPanel>();
-            if(bgPanel.PositionIndex == PositionIndex)
+            if (bgPanel.PositionIndex == PositionIndex)
             {
                 transform.position = startPosition;
             }

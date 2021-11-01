@@ -80,4 +80,12 @@ public class PanelManager : MonoBehaviour
     {
         return staticLinePanelPrefab;
     }
+
+    public static void DisableDrag()
+    {
+        foreach(LinePanel panel in allLinePanels)
+        {
+            panel.canDrag = false;
+        }
+    }
 }

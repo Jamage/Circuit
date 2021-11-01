@@ -23,6 +23,7 @@ public class LevelManager : MonoBehaviour
 
     public void RoundOver()
     {
+        PanelManager.DisableDrag();
         gameplaySceneMenu.SetupForCompletedLevel();
     }
 }

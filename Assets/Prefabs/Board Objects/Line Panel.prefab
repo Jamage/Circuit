@@ -458,6 +458,7 @@ MonoBehaviour:
   connectedMaterial: {fileID: 2100000, guid: 5f06dfec3d0377d4fb694cd319e9518b, type: 2}
   selectionHighlight: {fileID: 7542391880154244824}
   ropeLines: {fileID: 7180598334403504609}
+  canDrag: 1
 --- !u!1 &7180598335799031662
 GameObject:
   m_ObjectHideFlags: 0
